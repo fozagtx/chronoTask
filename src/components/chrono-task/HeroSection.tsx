@@ -11,6 +11,12 @@ import {
   BarChart3,
 } from "lucide-react";
 import Image from "next/image";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export function HeroSection() {
   return (
@@ -22,7 +28,14 @@ export function HeroSection() {
       <div className="relative z-10 flex flex-col items-center justify-center min-h-[50vh] px-6 pt-24 pb-8">
         {/* Headline */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 text-center mb-4 tracking-tight">
-          Turn videos into action
+          Turn{" "}
+          <span className="inline-flex items-center align-baseline" aria-hidden>
+            <Youtube
+              className="w-[1em] h-[1em] text-red-500"
+              fill="currentColor"
+            />
+          </span>
+          <span className="sr-only">YouTube </span> videos into action
         </h1>
 
         {/* Subheadline */}
@@ -168,6 +181,73 @@ export function HeroSection() {
         </div>
       </div>
 
+      {/* FAQs */}
+      <div id="faqs" className="relative z-10 px-6 py-16 bg-white scroll-mt-24">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold text-slate-900 text-center mb-3">
+            FAQs
+          </h2>
+          <p className="text-slate-500 text-center mb-10 max-w-xl mx-auto">
+            Everything you need to know before turning YouTube videos into a
+            study plan.
+          </p>
+
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1" className="px-6">
+                <AccordionTrigger className="text-left">
+                  What does ChronoTask (LearnLM) do?
+                </AccordionTrigger>
+                <AccordionContent className="text-slate-500">
+                  Paste a YouTube link and the app extracts key concepts and
+                  generates an actionable checklist so you can learn by doing.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-2" className="px-6">
+                <AccordionTrigger className="text-left">
+                  Which YouTube videos are supported?
+                </AccordionTrigger>
+                <AccordionContent className="text-slate-500">
+                  Most public educational videos work. If a video has captions
+                  available, the results are usually best.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-3" className="px-6">
+                <AccordionTrigger className="text-left">
+                  Do you save my videos or progress?
+                </AccordionTrigger>
+                <AccordionContent className="text-slate-500">
+                  Your saved courses and task progress are stored locally in
+                  your browser so you can pick up where you left off.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-4" className="px-6">
+                <AccordionTrigger className="text-left">
+                  Can I export what the AI generates?
+                </AccordionTrigger>
+                <AccordionContent className="text-slate-500">
+                  Yes. You can generate slides and export summaries to share or
+                  study offline.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-5" className="px-6">
+                <AccordionTrigger className="text-left">
+                  Is it free to use?
+                </AccordionTrigger>
+                <AccordionContent className="text-slate-500">
+                  The app may have usage limits depending on AI costs. If you
+                  hit a limit, try again later.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        </div>
+      </div>
+
       {/* Footer */}
       <footer className="relative z-10 border-t border-slate-200 bg-white/80 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-6 py-8">
@@ -176,9 +256,9 @@ export function HeroSection() {
               <Image
                 src="/logo.png"
                 alt="LearnLM"
-                width={140}
-                height={40}
-                className="h-10 w-auto"
+                width={180}
+                height={52}
+                className="h-12 w-auto"
               />
             </div>
             <p className="text-slate-400 text-sm">
