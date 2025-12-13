@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Library, Plus, LogOut } from "lucide-react";
 import { useUser } from "@civic/auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
 
 interface NavbarProps {
   onNewCourse: () => void;
@@ -19,21 +20,14 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
         {/* Rounded container */}
         <div className="bg-white/95 backdrop-blur-md rounded-full px-2 py-1 shadow-sm border border-slate-100 flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-1">
-            <div className="w-6 h-6 bg-gradient-to-br from-orange-400 to-orange-500 rounded-md flex items-center justify-center">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M12 2v4" />
-                <path d="M12 18v4" />
-                <path d="M4.93 4.93l2.83 2.83" />
-                <path d="M16.24 16.24l2.83 2.83" />
-                <path d="M2 12h4" />
-                <path d="M18 12h4" />
-              </svg>
-            </div>
-            <span className="font-semibold text-slate-800 tracking-tight text-xs">
-              LearnLM
-            </span>
+          <div className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt="LearnLM"
+              width={100}
+              height={28}
+              className="h-7 w-auto"
+            />
           </div>
 
           {/* Actions */}

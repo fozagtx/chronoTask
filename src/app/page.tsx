@@ -33,6 +33,13 @@ export default function Page() {
     }
   }, [videoId]);
 
+  // Redirect to input view when user logs in
+  useEffect(() => {
+    if (user && view === "hero") {
+      setView("input");
+    }
+  }, [user, view]);
+
   const validateYouTubeUrl = (url: string): boolean => {
     const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|v\/)|youtu\.be\/)[\w-]+/;
     return youtubeRegex.test(url);
