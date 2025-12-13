@@ -19,7 +19,7 @@ export function TaskPanel({ tasks, onToggleTask }: TaskPanelProps) {
   return (
     <div className="h-full flex flex-col bg-white rounded-xl shadow-md overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b border-slate-200">
+      <div className="flex flex-col gap-4 border-b border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div>
           <h2 className="text-xl font-semibold text-slate-900 font-heading">
             Action Plan
@@ -46,7 +46,7 @@ export function TaskPanel({ tasks, onToggleTask }: TaskPanelProps) {
 
       {/* Completion Message */}
       {progress === 100 && (
-        <div className="p-6 bg-gradient-to-r from-orange-500/10 to-orange-500/5 border-t border-orange-500/20">
+        <div className="p-4 sm:p-6 bg-gradient-to-r from-orange-500/10 to-orange-500/5 border-t border-orange-500/20">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
               <svg

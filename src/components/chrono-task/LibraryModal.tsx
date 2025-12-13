@@ -48,9 +48,9 @@ export function LibraryModal({
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden animate-float-in">
+      <div className="relative mx-4 flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl animate-float-in sm:mx-0">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
+        <div className="flex items-center justify-between border-b border-slate-200 p-4 sm:p-6">
           <h2 className="text-xl font-semibold text-slate-900 font-heading">
             My Library
           </h2>
@@ -63,7 +63,7 @@ export function LibraryModal({
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(80vh-80px)]">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6">
           {courses.length === 0 ? (
             <div className="text-center py-12">
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -88,7 +88,7 @@ export function LibraryModal({
                   >
                     <div className="flex items-start gap-4">
                       {/* Thumbnail */}
-                      <div className="w-32 h-20 bg-slate-200 rounded-lg overflow-hidden flex-shrink-0">
+                      <div className="h-16 w-28 flex-shrink-0 overflow-hidden rounded-lg bg-slate-200 sm:h-20 sm:w-32">
                         <img
                           src={`https://img.youtube.com/vi/${course.videoId}/mqdefault.jpg`}
                           alt={course.title}
@@ -101,7 +101,7 @@ export function LibraryModal({
                         <h3 className="font-medium text-slate-900 truncate mb-1">
                           {course.title || "Untitled Course"}
                         </h3>
-                        <div className="flex items-center gap-4 text-sm text-slate-500 mb-2">
+                        <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-500">
                           <span className="flex items-center gap-1">
                             <CheckCircle className="w-4 h-4" />
                             {course.tasks.filter((t) => t.completed).length}/
@@ -127,7 +127,7 @@ export function LibraryModal({
                         variant="ghost"
                         size="sm"
                         onClick={(e) => handleDelete(course.id, e)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-red-500 hover:bg-red-50"
+                        className="text-slate-400 hover:bg-red-50 hover:text-red-500 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

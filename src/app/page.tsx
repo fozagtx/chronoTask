@@ -11,7 +11,11 @@ import {
   SlidesModal,
   CivicAuthModal,
 } from "@/components/chrono-task";
-import { extractVideoId, fetchTranscript } from "@/lib/youtube";
+import {
+  extractVideoId,
+  fetchTranscript,
+  fetchVideoTitle,
+} from "@/lib/youtube";
 import { analyzeTranscript } from "@/lib/openai";
 import {
   saveCourse,
@@ -162,6 +166,26 @@ export default function Page() {
     setIsSaved(true);
     setIsLibraryOpen(false);
     setView("dashboard");
+
+    const maybePlaceholder =
+      !course.title?.trim() ||
+      course.title.trim() === `Video ${course.videoId}`;
+
+    if (maybePlaceholder) {
+      void (async () => {
+        const resolved = await fetchVideoTitle(course.videoId);
+        if (resolved) {
+          setVideoTitle(resolved);
+          saveCourse({
+            videoId: course.videoId,
+            title: resolved,
+            concepts: course.concepts,
+            tasks: course.tasks,
+            transcript: course.transcript,
+          });
+        }
+      })();
+    }
   };
 
   // Render URL input view
@@ -177,7 +201,7 @@ export default function Page() {
         </p>
 
         <form onSubmit={handleSubmit} className="w-full max-w-xl">
-          <div className="flex items-center gap-2 bg-white rounded-full shadow-lg shadow-slate-200/50 p-2 border border-slate-100">
+          <div className="flex flex-col items-stretch gap-2 bg-white rounded-2xl shadow-lg shadow-slate-200/50 p-2 border border-slate-100 sm:flex-row sm:items-center sm:rounded-full">
             <Input
               type="text"
               placeholder="Paste YouTube URL here..."
@@ -186,12 +210,12 @@ export default function Page() {
                 setUrl(e.target.value);
                 setError("");
               }}
-              className="flex-1 h-12 border-0 shadow-none text-base placeholder:text-slate-400 focus-visible:ring-0 bg-transparent px-4 rounded-full"
+              className="h-12 w-full border-0 bg-transparent px-4 text-base placeholder:text-slate-400 shadow-none focus-visible:ring-0 sm:flex-1 sm:rounded-full"
             />
             <Button
               type="submit"
               disabled={isLoading}
-              className="h-12 px-6 bg-orange-500 hover:bg-orange-600 text-white rounded-full shadow-sm font-medium"
+              className="h-12 w-full rounded-xl bg-orange-500 px-6 font-medium text-white shadow-sm hover:bg-orange-600 sm:w-auto sm:rounded-full"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -228,6 +252,8 @@ export default function Page() {
           videoId={videoId}
           concepts={concepts}
           tasks={tasks}
+          transcript={transcript}
+          videoTitle={videoTitle}
           onToggleTask={handleToggleTask}
           onSaveCourse={handleSaveCourse}
           onOpenSlides={() => setIsSlidesOpen(true)}

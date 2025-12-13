@@ -26,7 +26,7 @@ export function CivicAuthModal({ isOpen, onClose, user }: CivicAuthModalProps) {
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-float-in">
+      <div className="relative mx-4 w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-2xl animate-float-in sm:mx-0">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -36,7 +36,7 @@ export function CivicAuthModal({ isOpen, onClose, user }: CivicAuthModalProps) {
         </button>
 
         {/* Content */}
-        <div className="p-8 text-center">
+        <div className="p-6 text-center sm:p-8">
           {/* Success icon */}
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-8 h-8 text-green-600" />
@@ -50,17 +50,24 @@ export function CivicAuthModal({ isOpen, onClose, user }: CivicAuthModalProps) {
           <div className="bg-slate-50 rounded-xl p-4 mb-6">
             <div className="flex items-center gap-4">
               <Avatar className="w-14 h-14">
-                <AvatarImage src={user.picture || undefined} alt={user.name || "User"} />
+                <AvatarImage
+                  src={user.picture || undefined}
+                  alt={user.name || "User"}
+                />
                 <AvatarFallback className="bg-orange-100 text-orange-600 text-lg font-semibold">
                   {user.name?.charAt(0) || user.email?.charAt(0) || "U"}
                 </AvatarFallback>
               </Avatar>
               <div className="text-left flex-1 min-w-0">
                 {user.name && (
-                  <p className="font-semibold text-slate-900 truncate">{user.name}</p>
+                  <p className="font-semibold text-slate-900 truncate">
+                    {user.name}
+                  </p>
                 )}
                 {user.email && (
-                  <p className="text-sm text-slate-500 truncate">{user.email}</p>
+                  <p className="text-sm text-slate-500 truncate">
+                    {user.email}
+                  </p>
                 )}
               </div>
             </div>
