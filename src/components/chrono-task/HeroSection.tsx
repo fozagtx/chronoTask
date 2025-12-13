@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sparkles, ArrowRight, Loader2 } from "lucide-react";
-import { FloatingCards } from "./FloatingCards";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { useUser } from "@civic/auth/react";
 
 interface HeroSectionProps {
   onSubmit: (url: string) => void;
@@ -15,6 +15,7 @@ interface HeroSectionProps {
 export function HeroSection({ onSubmit, isLoading, error: externalError }: HeroSectionProps) {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
+  const { user, signIn, isLoading: authLoading } = useUser();
 
   const displayError = externalError || error;
 
@@ -26,55 +27,61 @@ export function HeroSection({ onSubmit, isLoading, error: externalError }: HeroS
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    
+
     if (!url.trim()) {
       setError("Please enter a YouTube URL");
       return;
     }
-    
+
     if (!validateYouTubeUrl(url)) {
       setError("Please enter a valid YouTube URL");
       return;
     }
-    
+
     onSubmit(url);
   };
 
   return (
-    <div className="min-h-screen dot-pattern relative overflow-hidden">
-      {/* Floating Decorative Cards */}
-      <FloatingCards />
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-50" />
 
       {/* Main Content */}
-      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-6 pt-16">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 pt-16">
         {/* Logo Icon */}
-        <div className="w-14 h-14 bg-white rounded-2xl shadow-md flex items-center justify-center mb-8 animate-float-in">
-          <div className="grid grid-cols-2 gap-1">
-            <div className="w-3 h-3 bg-slate-900 rounded-full" />
-            <div className="w-3 h-3 bg-slate-900 rounded-full" />
-            <div className="w-3 h-3 bg-slate-900 rounded-full" />
-            <div className="w-3 h-3 bg-slate-900 rounded-full" />
-          </div>
+        <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-orange-500/20">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M12 2v4" />
+            <path d="M12 18v4" />
+            <path d="M4.93 4.93l2.83 2.83" />
+            <path d="M16.24 16.24l2.83 2.83" />
+            <path d="M2 12h4" />
+            <path d="M18 12h4" />
+            <path d="M4.93 19.07l2.83-2.83" />
+            <path d="M16.24 7.76l2.83-2.83" />
+          </svg>
         </div>
 
         {/* Headline */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 text-center mb-4 animate-float-in-delay-1 font-heading">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 text-center mb-4 tracking-tight">
           Turn videos into action
         </h1>
-        
+
         {/* Subheadline */}
-        <p className="text-lg md:text-xl text-slate-500 text-center mb-10 max-w-md animate-float-in-delay-2">
-          Paste a course URL to generate your study plan
+        <p className="text-lg text-slate-500 text-center mb-12 max-w-md">
+          Paste a YouTube URL to generate your study plan
         </p>
 
-        {/* Input Form */}
-        <form 
-          onSubmit={handleSubmit}
-          className="w-full max-w-2xl animate-float-in-delay-3"
-        >
-          <div className="relative flex items-center gap-3 bg-white rounded-2xl shadow-lg p-2 border border-slate-200 hover:shadow-xl transition-shadow duration-300">
-            <div className="flex-1 flex items-center">
-              <Sparkles className="w-5 h-5 text-slate-400 ml-4 mr-3" />
+        {/* Input Form or Sign In Prompt */}
+        {authLoading ? (
+          <div className="flex items-center justify-center gap-3 bg-white rounded-full shadow-lg shadow-slate-200/50 px-8 py-4">
+            <Loader2 className="w-5 h-5 text-orange-500 animate-spin" />
+            <span className="text-slate-500">Loading...</span>
+          </div>
+        ) : user ? (
+          <form onSubmit={handleSubmit} className="w-full max-w-xl">
+            <div className="flex items-center gap-2 bg-white rounded-full shadow-lg shadow-slate-200/50 p-2 border border-slate-100">
               <Input
                 type="text"
                 placeholder="Paste YouTube URL here..."
@@ -83,38 +90,47 @@ export function HeroSection({ onSubmit, isLoading, error: externalError }: HeroS
                   setUrl(e.target.value);
                   setError("");
                 }}
-                className="flex-1 h-14 border-0 shadow-none text-base placeholder:text-slate-400 focus-visible:ring-0 bg-transparent"
+                className="flex-1 h-12 border-0 shadow-none text-base placeholder:text-slate-400 focus-visible:ring-0 bg-transparent px-4 rounded-full"
               />
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="h-12 px-6 bg-orange-500 hover:bg-orange-600 text-white rounded-full shadow-sm font-medium"
+              >
+                {isLoading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    Generate
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </>
+                )}
+              </Button>
             </div>
-            <Button 
-              type="submit"
-              disabled={isLoading}
-              className="h-14 px-6 bg-[#2563EB] hover:bg-[#1d4ed8] text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] text-base font-medium"
+
+            {/* Error Message */}
+            {displayError && (
+              <p className="text-red-500 text-sm mt-3 text-center">
+                {displayError}
+              </p>
+            )}
+          </form>
+        ) : (
+          <div className="flex flex-col items-center gap-6">
+            <p className="text-slate-500 text-center">
+              Sign in to start creating your study plans
+            </p>
+            <Button
+              onClick={() => signIn()}
+              className="h-12 px-8 bg-orange-500 hover:bg-orange-600 text-white rounded-full shadow-lg shadow-orange-500/20 font-medium"
             >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  Generate Plan
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </>
-              )}
+              Sign in with Google
             </Button>
           </div>
-          
-          {/* Error Message */}
-          {displayError && (
-            <p className="text-red-500 text-sm mt-3 text-center animate-float-in">
-              {displayError}
-            </p>
-          )}
-        </form>
+        )}
 
         {/* Helper Text */}
-        <p className="text-sm text-slate-400 mt-6 animate-float-in-delay-3">
+        <p className="text-sm text-slate-400 mt-8">
           Works with any YouTube educational video
         </p>
       </div>
