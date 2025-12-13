@@ -1,6 +1,7 @@
 "use client";
 
-import { ListChecks, Sparkles, Youtube, Brain, Target, Zap, BookOpen, Clock, BarChart3 } from "lucide-react";
+import { ListChecks, Youtube, Brain, Target, Zap, BookOpen, Clock, BarChart3 } from "lucide-react";
+import Image from "next/image";
 
 export function HeroSection() {
   return (
@@ -26,25 +27,14 @@ export function HeroSection() {
         <div className="max-w-3xl mx-auto">
           <div className="bg-slate-900 rounded-2xl overflow-hidden shadow-2xl shadow-slate-900/20">
             <div className="aspect-video relative">
-              <video
-                className="w-full h-full object-cover"
-                autoPlay
-                muted
-                loop
-                playsInline
-                poster="/demo-poster.png"
-              >
-                <source src="/demo.mp4" type="video/mp4" />
-                {/* Fallback gradient if no video */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Youtube className="w-8 h-8 text-white" />
-                    </div>
-                    <p className="text-slate-400 text-sm">Demo video coming soon</p>
-                  </div>
-                </div>
-              </video>
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/vTCyloUX238?autoplay=1&mute=1&loop=1&playlist=vTCyloUX238"
+                title="Demo Video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
           </div>
         </div>
@@ -141,11 +131,14 @@ export function HeroSection() {
       <footer className="relative z-10 border-t border-slate-200 bg-white/80 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-6 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-gradient-to-br from-orange-400 to-orange-500 rounded-lg flex items-center justify-center">
-                <Sparkles className="w-3 h-3 text-white" />
-              </div>
-              <span className="font-semibold text-slate-800 text-sm">LearnLM</span>
+            <div className="flex items-center">
+              <Image
+                src="/logo.png"
+                alt="LearnLM"
+                width={100}
+                height={28}
+                className="h-7 w-auto"
+              />
             </div>
             <p className="text-slate-400 text-sm">
               Transform how you learn from videos
