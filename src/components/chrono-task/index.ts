@@ -1,5 +1,8 @@
 export { Navbar } from "./Navbar";
+export { HeaderBase } from "./HeaderBase";
 export { HeroSection } from "./HeroSection";
+export { HowItWorks } from "./HowItWorks";
+export { Footer } from "./Footer";
 export { FloatingCards } from "./FloatingCards";
 export { VideoPanel } from "./VideoPanel";
 export { TaskPanel } from "./TaskPanel";

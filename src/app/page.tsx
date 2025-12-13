@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Navbar, HeroSection, LearningDashboard, Task, LibraryModal, SlidesModal } from "@/components/chrono-task";
+import { HeaderBase, HeroSection, HowItWorks, Footer, LearningDashboard, Task, LibraryModal, SlidesModal } from "@/components/chrono-task";
 import { extractVideoId, fetchTranscript } from "@/lib/youtube";
 import { analyzeTranscript } from "@/lib/openai";
 import { saveCourse, updateCourseProgress, getSavedCourses, SavedCourse } from "@/lib/storage";
@@ -114,13 +114,18 @@ export default function Page() {
 
   return (
     <main className="min-h-screen">
-      <Navbar 
-        onNewCourse={handleNewCourse} 
+      <HeaderBase
+        onNewCourse={handleNewCourse}
         onOpenLibrary={() => setIsLibraryOpen(true)}
+        showActions={view === "dashboard"}
       />
-      
+
       {view === "hero" ? (
-        <HeroSection onSubmit={handleSubmit} isLoading={isLoading} error={error} />
+        <>
+          <HeroSection onSubmit={handleSubmit} isLoading={isLoading} error={error} />
+          <HowItWorks />
+          <Footer />
+        </>
       ) : (
         <LearningDashboard
           videoId={videoId}
