@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${spaceGrotesk.variable} ${inter.className} antialiased`}>
-        <CivicAuthProvider clientId="9efd0ded-8be4-431c-8be4-cfcf03522a53">
+        <CivicAuthProvider>
           {children}
         </CivicAuthProvider>
       </body>
