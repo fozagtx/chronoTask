@@ -14,7 +14,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "ChronoTask - Turn Videos into Action",
+  title: "LearnLM - Turn Videos into Action",
   description: "Transform educational videos into actionable study plans with AI-generated task breakdowns",
 };
 
