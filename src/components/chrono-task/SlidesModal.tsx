@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { X, Download, ChevronLeft, ChevronRight, FileText, Loader2 } from "lucide-react";
+import {
+  X,
+  Download,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  Loader2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Slide {
@@ -17,7 +24,13 @@ interface SlidesModalProps {
   videoTitle?: string;
 }
 
-export function SlidesModal({ isOpen, onClose, concepts, tasks, videoTitle }: SlidesModalProps) {
+export function SlidesModal({
+  isOpen,
+  onClose,
+  concepts,
+  tasks,
+  videoTitle,
+}: SlidesModalProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isExporting, setIsExporting] = useState(false);
 
@@ -60,7 +73,7 @@ export function SlidesModal({ isOpen, onClose, concepts, tasks, videoTitle }: Sl
 
   const exportToPDF = async () => {
     setIsExporting(true);
-    
+
     try {
       // Create a printable HTML document
       const printContent = `
@@ -109,7 +122,7 @@ export function SlidesModal({ isOpen, onClose, concepts, tasks, videoTitle }: Sl
             }
             li::before {
               content: "•";
-              color: #2563eb;
+              color: #f97316;
               font-size: 32px;
               position: absolute;
               left: 0;
@@ -138,27 +151,31 @@ export function SlidesModal({ isOpen, onClose, concepts, tasks, videoTitle }: Sl
           </style>
         </head>
         <body>
-          ${slides.map((slide, index) => `
-            <div class="slide ${index === 0 ? 'title-slide' : ''}">
+          ${slides
+            .map(
+              (slide, index) => `
+            <div class="slide ${index === 0 ? "title-slide" : ""}">
               <h1>${slide.title}</h1>
               <ul>
-                ${slide.content.map(item => `<li>${item}</li>`).join('')}
+                ${slide.content.map((item) => `<li>${item}</li>`).join("")}
               </ul>
               <div class="slide-number">${index + 1} / ${slides.length}</div>
               <div class="branding">ChronoTask</div>
             </div>
-          `).join('')}
+          `,
+            )
+            .join("")}
         </body>
         </html>
       `;
 
       // Open print dialog
-      const printWindow = window.open('', '_blank');
+      const printWindow = window.open("", "_blank");
       if (printWindow) {
         printWindow.document.write(printContent);
         printWindow.document.close();
         printWindow.focus();
-        
+
         // Wait for content to load then print
         setTimeout(() => {
           printWindow.print();
@@ -166,7 +183,7 @@ export function SlidesModal({ isOpen, onClose, concepts, tasks, videoTitle }: Sl
         }, 500);
       }
     } catch (error) {
-      console.error('Error exporting PDF:', error);
+      console.error("Error exporting PDF:", error);
     } finally {
       setIsExporting(false);
     }
@@ -179,17 +196,17 @@ export function SlidesModal({ isOpen, onClose, concepts, tasks, videoTitle }: Sl
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
       />
-      
+
       {/* Modal */}
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden animate-float-in">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
           <div className="flex items-center gap-3">
-            <FileText className="w-5 h-5 text-[#2563EB]" />
+            <FileText className="w-5 h-5 text-orange-500" />
             <span className="font-medium text-slate-900">Slides Preview</span>
             <span className="text-sm text-slate-500">
               {currentSlide + 1} / {slides.length}
@@ -199,7 +216,7 @@ export function SlidesModal({ isOpen, onClose, concepts, tasks, videoTitle }: Sl
             <Button
               onClick={exportToPDF}
               disabled={isExporting}
-              className="bg-[#2563EB] hover:bg-[#1d4ed8] text-white"
+              className="bg-orange-500 hover:bg-orange-600 text-white"
             >
               {isExporting ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -219,17 +236,21 @@ export function SlidesModal({ isOpen, onClose, concepts, tasks, videoTitle }: Sl
 
         {/* Slide Content */}
         <div className="aspect-video bg-gradient-to-br from-slate-50 to-slate-100 p-12 flex flex-col justify-center">
-          <h2 className={`font-bold text-slate-900 mb-8 ${currentSlide === 0 ? 'text-4xl text-center' : 'text-3xl'}`}>
+          <h2
+            className={`font-bold text-slate-900 mb-8 ${currentSlide === 0 ? "text-4xl text-center" : "text-3xl"}`}
+          >
             {slide.title}
           </h2>
-          <ul className={`space-y-4 ${currentSlide === 0 ? 'text-center' : ''}`}>
+          <ul
+            className={`space-y-4 ${currentSlide === 0 ? "text-center" : ""}`}
+          >
             {slide.content.map((item, index) => (
-              <li 
+              <li
                 key={index}
-                className={`text-xl text-slate-700 ${currentSlide === 0 ? '' : 'flex items-start gap-3'}`}
+                className={`text-xl text-slate-700 ${currentSlide === 0 ? "" : "flex items-start gap-3"}`}
               >
                 {currentSlide !== 0 && (
-                  <span className="w-2 h-2 bg-[#2563EB] rounded-full mt-2.5 flex-shrink-0" />
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mt-2.5 flex-shrink-0" />
                 )}
                 {item}
               </li>
@@ -248,7 +269,7 @@ export function SlidesModal({ isOpen, onClose, concepts, tasks, videoTitle }: Sl
             <ChevronLeft className="w-4 h-4 mr-1" />
             Previous
           </Button>
-          
+
           {/* Slide indicators */}
           <div className="flex items-center gap-1.5">
             {slides.map((_, index) => (
@@ -256,14 +277,14 @@ export function SlidesModal({ isOpen, onClose, concepts, tasks, videoTitle }: Sl
                 key={index}
                 onClick={() => setCurrentSlide(index)}
                 className={`w-2 h-2 rounded-full transition-all ${
-                  index === currentSlide 
-                    ? 'bg-[#2563EB] w-6' 
-                    : 'bg-slate-300 hover:bg-slate-400'
+                  index === currentSlide
+                    ? "bg-orange-500 w-6"
+                    : "bg-slate-300 hover:bg-slate-400"
                 }`}
               />
             ))}
           </div>
-          
+
           <Button
             variant="ghost"
             onClick={nextSlide}
