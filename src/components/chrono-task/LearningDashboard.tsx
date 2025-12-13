@@ -77,7 +77,12 @@ export function LearningDashboard({
 
           {/* Right Panel - Tasks (60%) */}
           <div className="animate-float-in-delay-1">
-            <TaskPanel tasks={tasks} onToggleTask={onToggleTask} />
+            <TaskPanel
+              tasks={tasks}
+              onToggleTask={onToggleTask}
+              concepts={concepts}
+              transcript={transcript}
+            />
           </div>
         </div>
       </div>

@@ -13,10 +13,16 @@ export interface Task {
 interface TaskItemProps {
   task: Task;
   onToggle: (id: string) => void;
+  onOpenSummary: (task: Task) => void;
   delay?: number;
 }
 
-export function TaskItem({ task, onToggle, delay = 0 }: TaskItemProps) {
+export function TaskItem({
+  task,
+  onToggle,
+  onOpenSummary,
+  delay = 0,
+}: TaskItemProps) {
   return (
     <div
       className={`
@@ -25,7 +31,7 @@ export function TaskItem({ task, onToggle, delay = 0 }: TaskItemProps) {
         animate-task-in
       `}
       style={{ animationDelay: `${delay}ms` }}
-      onClick={() => onToggle(task.id)}
+      onClick={() => onOpenSummary(task)}
     >
       {/* Checkbox */}
       <Checkbox
