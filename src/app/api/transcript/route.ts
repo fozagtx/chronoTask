@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { YoutubeTranscript } from 'youtube-transcript';
 
 // Force dynamic rendering to prevent build-time execution
 export const dynamic = 'force-dynamic';
@@ -16,14 +15,17 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const transcriptItems = await YoutubeTranscript.fetchTranscript(videoId);
+    // Dynamic import to prevent build-time execution
+    const { YouTubeTranscriptApi } = await import('@playzone/youtube-transcript');
+    const api = new YouTubeTranscriptApi();
+    const fetchedTranscript = await api.fetch(videoId);
 
-    if (!transcriptItems || transcriptItems.length === 0) {
+    if (!fetchedTranscript || fetchedTranscript.length === 0) {
       throw new Error('No transcript available for this video');
     }
 
-    const transcript = transcriptItems
-      .map((item) => item.text)
+    const transcript = fetchedTranscript.snippets
+      .map((snippet: { text: string }) => snippet.text)
       .join(' ')
       .replace(/\s+/g, ' ')
       .trim();
