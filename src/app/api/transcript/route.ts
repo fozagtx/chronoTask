@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 
     // Combine all transcript segments into a single text
     const transcript = transcriptItems
-      .map((item) => item.text)
+      .map((item: { text: string }) => item.text)
       .join(' ')
       .replace(/\s+/g, ' ')
       .trim();
