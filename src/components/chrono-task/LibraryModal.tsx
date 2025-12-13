@@ -11,7 +11,11 @@ interface LibraryModalProps {
   onSelectCourse: (course: SavedCourse) => void;
 }
 
-export function LibraryModal({ isOpen, onClose, onSelectCourse }: LibraryModalProps) {
+export function LibraryModal({
+  isOpen,
+  onClose,
+  onSelectCourse,
+}: LibraryModalProps) {
   const [courses, setCourses] = useState<SavedCourse[]>([]);
 
   useEffect(() => {
@@ -28,7 +32,9 @@ export function LibraryModal({ isOpen, onClose, onSelectCourse }: LibraryModalPr
 
   const getProgress = (tasks: SavedCourse["tasks"]) => {
     if (tasks.length === 0) return 0;
-    return Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100);
+    return Math.round(
+      (tasks.filter((t) => t.completed).length / tasks.length) * 100,
+    );
   };
 
   if (!isOpen) return null;
@@ -36,16 +42,18 @@ export function LibraryModal({ isOpen, onClose, onSelectCourse }: LibraryModalPr
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
-      
+
       {/* Modal */}
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden animate-float-in">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-slate-200">
-          <h2 className="text-xl font-semibold text-slate-900 font-heading">My Library</h2>
+          <h2 className="text-xl font-semibold text-slate-900 font-heading">
+            My Library
+          </h2>
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors"
@@ -61,8 +69,12 @@ export function LibraryModal({ isOpen, onClose, onSelectCourse }: LibraryModalPr
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Play className="w-8 h-8 text-slate-400" />
               </div>
-              <h3 className="text-lg font-medium text-slate-900 mb-2">No saved courses</h3>
-              <p className="text-slate-500">Generate a study plan and save it to your library</p>
+              <h3 className="text-lg font-medium text-slate-900 mb-2">
+                No saved courses
+              </h3>
+              <p className="text-slate-500">
+                Generate a study plan and save it to your library
+              </p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -92,18 +104,19 @@ export function LibraryModal({ isOpen, onClose, onSelectCourse }: LibraryModalPr
                         <div className="flex items-center gap-4 text-sm text-slate-500 mb-2">
                           <span className="flex items-center gap-1">
                             <CheckCircle className="w-4 h-4" />
-                            {course.tasks.filter(t => t.completed).length}/{course.tasks.length} tasks
+                            {course.tasks.filter((t) => t.completed).length}/
+                            {course.tasks.length} tasks
                           </span>
                           <span className="flex items-center gap-1">
                             <Clock className="w-4 h-4" />
                             {new Date(course.updatedAt).toLocaleDateString()}
                           </span>
                         </div>
-                        
+
                         {/* Progress bar */}
                         <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-[#2563EB] transition-all duration-500"
+                          <div
+                            className="h-full bg-orange-500 transition-all duration-500"
                             style={{ width: `${progress}%` }}
                           />
                         </div>

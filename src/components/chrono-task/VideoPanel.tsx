@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { ChevronDown, ChevronUp, Lightbulb } from "lucide-react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 interface VideoPanelProps {
   videoId: string;
@@ -31,8 +35,8 @@ export function VideoPanel({ videoId, concepts }: VideoPanelProps) {
           <CollapsibleTrigger className="w-full">
             <div className="flex items-center justify-between p-5 hover:bg-slate-50 transition-colors duration-200">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#2563EB]/10 rounded-lg flex items-center justify-center">
-                  <Lightbulb className="w-5 h-5 text-[#2563EB]" />
+                <div className="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center">
+                  <Lightbulb className="w-5 h-5 text-orange-500" />
                 </div>
                 <div className="text-left">
                   <h3 className="font-semibold text-slate-900 font-heading">
@@ -52,18 +56,22 @@ export function VideoPanel({ videoId, concepts }: VideoPanelProps) {
               </div>
             </div>
           </CollapsibleTrigger>
-          
+
           <CollapsibleContent>
             <div className="px-5 pb-5 space-y-3 animate-float-in">
               {concepts.map((concept, index) => (
-                <div 
+                <div
                   key={index}
                   className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg"
                 >
-                  <div className="w-6 h-6 bg-[#2563EB] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-xs font-medium text-white">{index + 1}</span>
+                  <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-xs font-medium text-white">
+                      {index + 1}
+                    </span>
                   </div>
-                  <p className="text-sm text-slate-700 leading-relaxed">{concept}</p>
+                  <p className="text-sm text-slate-700 leading-relaxed">
+                    {concept}
+                  </p>
                 </div>
               ))}
             </div>

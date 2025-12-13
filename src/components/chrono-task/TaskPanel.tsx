@@ -9,10 +9,10 @@ interface TaskPanelProps {
 }
 
 export function TaskPanel({ tasks, onToggleTask }: TaskPanelProps) {
-  const completedCount = tasks.filter(t => t.completed).length;
+  const completedCount = tasks.filter((t) => t.completed).length;
   const progress = tasks.length > 0 ? (completedCount / tasks.length) * 100 : 0;
   const totalTime = tasks.reduce((acc, task) => {
-    const minutes = parseInt(task.duration.replace(/[^0-9]/g, '')) || 0;
+    const minutes = parseInt(task.duration.replace(/[^0-9]/g, "")) || 0;
     return acc + minutes;
   }, 0);
 
@@ -25,7 +25,8 @@ export function TaskPanel({ tasks, onToggleTask }: TaskPanelProps) {
             Action Plan
           </h2>
           <p className="text-sm text-slate-500 mt-1">
-            {completedCount} of {tasks.length} tasks completed • {totalTime} min total
+            {completedCount} of {tasks.length} tasks completed • {totalTime} min
+            total
           </p>
         </div>
         <ProgressRing progress={progress} />
@@ -34,9 +35,9 @@ export function TaskPanel({ tasks, onToggleTask }: TaskPanelProps) {
       {/* Task List */}
       <div className="flex-1 overflow-y-auto">
         {tasks.map((task, index) => (
-          <TaskItem 
-            key={task.id} 
-            task={task} 
+          <TaskItem
+            key={task.id}
+            task={task}
             onToggle={onToggleTask}
             delay={index * 100}
           />
@@ -45,11 +46,21 @@ export function TaskPanel({ tasks, onToggleTask }: TaskPanelProps) {
 
       {/* Completion Message */}
       {progress === 100 && (
-        <div className="p-6 bg-gradient-to-r from-[#2563EB]/10 to-[#2563EB]/5 border-t border-[#2563EB]/20">
+        <div className="p-6 bg-gradient-to-r from-orange-500/10 to-orange-500/5 border-t border-orange-500/20">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#2563EB] rounded-full flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+              <svg
+                className="w-5 h-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
             <div>
