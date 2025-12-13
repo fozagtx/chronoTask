@@ -7,6 +7,7 @@ export { TaskItem } from "./TaskItem";
 export type { Task } from "./TaskItem";
 export { ProgressRing } from "./ProgressRing";
 export { LearningDashboard } from "./LearningDashboard";
+export { AskWidget } from "./AskWidget";
 export { LibraryModal } from "./LibraryModal";
 export { SlidesModal } from "./SlidesModal";
 export { CivicAuthModal } from "./CivicAuthModal";

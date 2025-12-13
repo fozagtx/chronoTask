@@ -11,7 +11,11 @@ import {
   SlidesModal,
   CivicAuthModal,
 } from "@/components/chrono-task";
-import { extractVideoId, fetchTranscript } from "@/lib/youtube";
+import {
+  extractVideoId,
+  fetchTranscript,
+  fetchVideoTitle,
+} from "@/lib/youtube";
 import { analyzeTranscript } from "@/lib/openai";
 import {
   saveCourse,
@@ -162,6 +166,26 @@ export default function Page() {
     setIsSaved(true);
     setIsLibraryOpen(false);
     setView("dashboard");
+
+    const maybePlaceholder =
+      !course.title?.trim() ||
+      course.title.trim() === `Video ${course.videoId}`;
+
+    if (maybePlaceholder) {
+      void (async () => {
+        const resolved = await fetchVideoTitle(course.videoId);
+        if (resolved) {
+          setVideoTitle(resolved);
+          saveCourse({
+            videoId: course.videoId,
+            title: resolved,
+            concepts: course.concepts,
+            tasks: course.tasks,
+            transcript: course.transcript,
+          });
+        }
+      })();
+    }
   };
 
   // Render URL input view
@@ -228,6 +252,8 @@ export default function Page() {
           videoId={videoId}
           concepts={concepts}
           tasks={tasks}
+          transcript={transcript}
+          videoTitle={videoTitle}
           onToggleTask={handleToggleTask}
           onSaveCourse={handleSaveCourse}
           onOpenSlides={() => setIsSlidesOpen(true)}

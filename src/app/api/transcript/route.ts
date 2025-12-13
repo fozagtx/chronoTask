@@ -20,8 +20,21 @@ export async function GET(request: NextRequest) {
     // Fetch the video info
     const info = await youtube.getInfo(videoId);
 
-    // Get the title
-    const title = info.basic_info.title;
+    const oembedTitle = async () => {
+      try {
+        const res = await fetch(
+          `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`,
+        );
+        if (!res.ok) return "";
+        const data = (await res.json()) as { title?: unknown };
+        return typeof data.title === "string" ? data.title.trim() : "";
+      } catch {
+        return "";
+      }
+    };
+
+    // Get the title (youtubei.js sometimes returns undefined)
+    const title = (info.basic_info.title || (await oembedTitle()) || "").trim();
 
     // Get the transcript data
     const transcriptData = await info.getTranscript();

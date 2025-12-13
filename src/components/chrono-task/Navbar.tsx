@@ -14,16 +14,16 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
   const { user, signIn, isLoading } = useUser();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 p-2">
+    <nav className="fixed top-0 left-0 right-0 z-50 p-1.5 sm:p-2">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white/95 backdrop-blur-md rounded-full px-5 py-3 shadow-sm border border-slate-100 flex items-center justify-between gap-4">
+        <div className="bg-white/95 backdrop-blur-md rounded-full px-4 py-2 shadow-sm border border-slate-100 flex items-center justify-between gap-3">
           <div className="flex items-center shrink-0">
             <Image
               src="/logo.png"
               alt="LearnLM"
               width={180}
               height={52}
-              className="h-12 w-auto"
+              className="h-10 w-auto"
               priority
             />
           </div>
@@ -48,7 +48,7 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
                   variant="ghost"
                   size="sm"
                   onClick={onOpenLibrary}
-                  className="rounded-full px-3 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  className="rounded-full px-2.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                 >
                   <Library className="w-4 h-4 mr-1" />
                   Library
@@ -56,7 +56,7 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
                 <Button
                   size="sm"
                   onClick={onNewCourse}
-                  className="rounded-full px-3 bg-orange-500 hover:bg-orange-600 text-white"
+                  className="rounded-full px-2.5 bg-orange-500 hover:bg-orange-600 text-white"
                 >
                   <Plus className="w-4 h-4 mr-1" />
                   New
@@ -69,7 +69,7 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
             ) : (
               <Button
                 onClick={() => signIn()}
-                className="rounded-full h-9 px-7 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium"
+                className="rounded-full h-9 px-5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium"
               >
                 Sign In
               </Button>
