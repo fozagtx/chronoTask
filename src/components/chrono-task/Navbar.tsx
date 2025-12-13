@@ -52,11 +52,22 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
                   <Plus className="w-3 h-3 mr-0.5" />
                   New
                 </Button>
-                <UserButton />
+
+                <div className="flex items-center gap-2 pl-1">
+                  <div className="flex flex-col items-end leading-tight max-w-[140px]">
+                    <p className="text-[10px] font-medium text-slate-700 truncate">
+                      {user.name || user.email || "Signed in"}
+                    </p>
+                    {user.name && user.email && (
+                      <p className="text-[9px] text-slate-500 truncate">{user.email}</p>
+                    )}
+                  </div>
+                  <UserButton />
+                </div>
               </>
             ) : (
               <Button
-                onClick={() => signIn({ displayMode: "iframe", iframeMode: "modal" })}
+                onClick={() => signIn()}
                 className="rounded-full px-3 h-6 bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-medium"
               >
                 Sign In
