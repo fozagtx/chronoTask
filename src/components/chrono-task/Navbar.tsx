@@ -1,16 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Library, Plus } from "lucide-react";
+import { Library, Plus, MessageCircle } from "lucide-react";
 import { useUser, UserButton } from "@civic/auth/react";
 import Image from "next/image";
 
 interface NavbarProps {
   onNewCourse: () => void;
   onOpenLibrary: () => void;
+  onOpenChat?: () => void;
 }
 
-export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
+export function Navbar({ onNewCourse, onOpenLibrary, onOpenChat }: NavbarProps) {
   const { user, signIn, isLoading } = useUser();
 
   return (
@@ -44,6 +45,17 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
               <div className="w-8 h-8 rounded-full bg-slate-100 animate-pulse" />
             ) : user ? (
               <>
+                {onOpenChat && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={onOpenChat}
+                    className="rounded-full px-2.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                  >
+                    <MessageCircle className="h-4 w-4 sm:mr-1" />
+                    <span className="hidden sm:inline">Ask</span>
+                  </Button>
+                )}
                 <Button
                   variant="ghost"
                   size="sm"
