@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
+import { CivicAuthProvider } from "@civic/auth/nextjs";
 import "./globals.css";
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
 
-const spaceGrotesk = Space_Grotesk({ 
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
 });
@@ -25,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${spaceGrotesk.variable} ${inter.className} antialiased`}>
-        {children}
+        <CivicAuthProvider>
+          {children}
+        </CivicAuthProvider>
       </body>
     </html>
   );
