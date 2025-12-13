@@ -1,9 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Library, Plus, LogOut } from "lucide-react";
-import { useUser } from "@civic/auth/react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Library, Plus } from "lucide-react";
+import { useUser, UserButton } from "@civic/auth/react";
 import Image from "next/image";
 
 interface NavbarProps {
@@ -12,7 +11,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
-  const { user, signIn, signOut, isLoading } = useUser();
+  const { user, signIn, isLoading } = useUser();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 p-2">
@@ -53,20 +52,7 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
                   <Plus className="w-3 h-3 mr-0.5" />
                   New
                 </Button>
-                <Avatar className="w-6 h-6">
-                  <AvatarImage src={user.picture} alt={user.name || "User"} />
-                  <AvatarFallback className="bg-slate-100 text-slate-600 text-[10px]">
-                    {user.name?.charAt(0) || "U"}
-                  </AvatarFallback>
-                </Avatar>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => signOut()}
-                  className="rounded-full h-6 w-6 p-0 text-slate-400 hover:text-slate-600 hover:bg-slate-100"
-                >
-                  <LogOut className="w-3 h-3" />
-                </Button>
+                <UserButton />
               </>
             ) : (
               <Button
