@@ -1,6 +1,15 @@
 "use client";
 
-import { ListChecks, Youtube, Brain, Target, Zap, BookOpen, Clock, BarChart3 } from "lucide-react";
+import {
+  ListChecks,
+  Youtube,
+  Brain,
+  Target,
+  Zap,
+  BookOpen,
+  Clock,
+  BarChart3,
+} from "lucide-react";
 import Image from "next/image";
 
 export function HeroSection() {
@@ -43,24 +52,35 @@ export function HeroSection() {
       {/* Features Section */}
       <div className="relative z-10 px-6 py-16 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-slate-900 text-center mb-3">Features</h2>
-          <p className="text-slate-500 text-center mb-10 max-w-lg mx-auto">Everything you need to transform passive video watching into active learning</p>
+          <h2 className="text-2xl font-bold text-slate-900 text-center mb-3">
+            Features
+          </h2>
+          <p className="text-slate-500 text-center mb-10 max-w-lg mx-auto">
+            Everything you need to transform passive video watching into active
+            learning
+          </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center">
               <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-3">
                 <Zap className="w-6 h-6 text-orange-500" />
               </div>
-              <h3 className="font-semibold text-slate-900 mb-1">Instant Analysis</h3>
-              <p className="text-slate-500 text-sm">AI extracts key concepts in seconds</p>
+              <h3 className="font-semibold text-slate-900 mb-1">
+                Instant Analysis
+              </h3>
+              <p className="text-slate-500 text-sm">
+                AI extracts key concepts in seconds
+              </p>
             </div>
 
             <div className="text-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <BookOpen className="w-6 h-6 text-blue-500" />
+              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <BookOpen className="w-6 h-6 text-orange-500" />
               </div>
               <h3 className="font-semibold text-slate-900 mb-1">Smart Tasks</h3>
-              <p className="text-slate-500 text-sm">Actionable learning checklist</p>
+              <p className="text-slate-500 text-sm">
+                Actionable learning checklist
+              </p>
             </div>
 
             <div className="text-center">
@@ -68,14 +88,18 @@ export function HeroSection() {
                 <Clock className="w-6 h-6 text-green-500" />
               </div>
               <h3 className="font-semibold text-slate-900 mb-1">Save Time</h3>
-              <p className="text-slate-500 text-sm">No more rewatching videos</p>
+              <p className="text-slate-500 text-sm">
+                No more rewatching videos
+              </p>
             </div>
 
             <div className="text-center">
               <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
                 <BarChart3 className="w-6 h-6 text-purple-500" />
               </div>
-              <h3 className="font-semibold text-slate-900 mb-1">Track Progress</h3>
+              <h3 className="font-semibold text-slate-900 mb-1">
+                Track Progress
+              </h3>
               <p className="text-slate-500 text-sm">Visual learning progress</p>
             </div>
           </div>
@@ -85,7 +109,9 @@ export function HeroSection() {
       {/* How It Works - Bento Grid */}
       <div className="relative z-10 px-6 py-16">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-slate-900 text-center mb-8">How it works</h2>
+          <h2 className="text-2xl font-bold text-slate-900 text-center mb-8">
+            How it works
+          </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Step 1 - Large */}
@@ -93,8 +119,13 @@ export function HeroSection() {
               <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center mb-4">
                 <Youtube className="w-5 h-5 text-orange-500" />
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">1. Paste a YouTube URL</h3>
-              <p className="text-slate-500 text-sm">Drop any educational video link and our AI will analyze the content, extracting key concepts and learning objectives.</p>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                1. Paste a YouTube URL
+              </h3>
+              <p className="text-slate-500 text-sm">
+                Drop any educational video link and our AI will analyze the
+                content, extracting key concepts and learning objectives.
+              </p>
             </div>
 
             {/* Step 2 */}
@@ -103,7 +134,9 @@ export function HeroSection() {
                 <Brain className="w-5 h-5 text-white" />
               </div>
               <h3 className="text-lg font-semibold mb-2">2. AI Analysis</h3>
-              <p className="text-orange-100 text-sm">Smart extraction of topics, concepts, and actionable tasks.</p>
+              <p className="text-orange-100 text-sm">
+                Smart extraction of topics, concepts, and actionable tasks.
+              </p>
             </div>
 
             {/* Step 3 */}
@@ -112,7 +145,9 @@ export function HeroSection() {
                 <ListChecks className="w-5 h-5 text-white" />
               </div>
               <h3 className="text-lg font-semibold mb-2">3. Get Tasks</h3>
-              <p className="text-slate-400 text-sm">Receive a structured checklist of actionable learning tasks.</p>
+              <p className="text-slate-400 text-sm">
+                Receive a structured checklist of actionable learning tasks.
+              </p>
             </div>
 
             {/* Step 4 - Large */}
@@ -120,8 +155,14 @@ export function HeroSection() {
               <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mb-4">
                 <Target className="w-5 h-5 text-green-600" />
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">4. Track Progress</h3>
-              <p className="text-slate-500 text-sm">Check off tasks as you complete them, save courses to your library, and build a consistent learning habit with visual progress tracking.</p>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                4. Track Progress
+              </h3>
+              <p className="text-slate-500 text-sm">
+                Check off tasks as you complete them, save courses to your
+                library, and build a consistent learning habit with visual
+                progress tracking.
+              </p>
             </div>
           </div>
         </div>

@@ -54,14 +54,6 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
                 </Button>
 
                 <div className="flex items-center gap-2 pl-1">
-                  <div className="flex flex-col items-end leading-tight max-w-[140px]">
-                    <p className="text-[10px] font-medium text-slate-700 truncate">
-                      {user.name || user.email || "Signed in"}
-                    </p>
-                    {user.name && user.email && (
-                      <p className="text-[9px] text-slate-500 truncate">{user.email}</p>
-                    )}
-                  </div>
                   <UserButton />
                 </div>
               </>

@@ -11,7 +11,7 @@
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 217 91% 60%; /* #2563EB - Vibrant blue */
+    --primary: 27 96% 53%; /* #F97316 - Orange-500 */
     --primary-foreground: 0 0% 100%;
     --secondary: 210 40% 96%;
     --secondary-foreground: 222 47% 11%;
@@ -23,7 +23,7 @@
     --destructive-foreground: 0 0% 100%;
     --border: 214 32% 91%; /* #CBD5E1 - Slate-300 */
     --input: 214 32% 91%;
-    --ring: 217 91% 60%;
+    --ring: 27 96% 53%;
     --radius: 0.75rem;
   }
 
@@ -34,7 +34,7 @@
     --card-foreground: 210 40% 98%;
     --popover: 222 47% 15%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217 91% 60%;
+    --primary: 27 96% 53%;
     --primary-foreground: 0 0% 100%;
     --secondary: 222 47% 20%;
     --secondary-foreground: 210 40% 98%;
@@ -46,7 +46,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 222 47% 25%;
     --input: 222 47% 25%;
-    --ring: 217 91% 60%;
+    --ring: 27 96% 53%;
   }
 }
 
@@ -57,7 +57,12 @@
   body {
     @apply bg-background text-foreground;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading;
   }
 }
@@ -67,26 +72,26 @@
     background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
     background-size: 20px 20px;
   }
-  
+
   .animate-float-in {
     animation: floatIn 0.5s ease-out forwards;
   }
-  
+
   .animate-float-in-delay-1 {
     animation: floatIn 0.5s ease-out 0.1s forwards;
     opacity: 0;
   }
-  
+
   .animate-float-in-delay-2 {
     animation: floatIn 0.5s ease-out 0.2s forwards;
     opacity: 0;
   }
-  
+
   .animate-float-in-delay-3 {
     animation: floatIn 0.5s ease-out 0.3s forwards;
     opacity: 0;
   }
-  
+
   .animate-task-in {
     animation: taskIn 0.4s ease-out forwards;
     opacity: 0;

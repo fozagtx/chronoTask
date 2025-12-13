@@ -2,10 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { useUser } from "@civic/auth/react";
-import { Navbar, HeroSection, LearningDashboard, Task, LibraryModal, SlidesModal, CivicAuthModal } from "@/components/chrono-task";
+import {
+  Navbar,
+  HeroSection,
+  LearningDashboard,
+  Task,
+  LibraryModal,
+  SlidesModal,
+  CivicAuthModal,
+} from "@/components/chrono-task";
 import { extractVideoId, fetchTranscript } from "@/lib/youtube";
 import { analyzeTranscript } from "@/lib/openai";
-import { saveCourse, updateCourseProgress, getSavedCourses, SavedCourse } from "@/lib/storage";
+import {
+  saveCourse,
+  updateCourseProgress,
+  getSavedCourses,
+  SavedCourse,
+} from "@/lib/storage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Loader2 } from "lucide-react";
@@ -31,7 +44,7 @@ export default function Page() {
   useEffect(() => {
     if (videoId) {
       const courses = getSavedCourses();
-      setIsSaved(courses.some(c => c.videoId === videoId));
+      setIsSaved(courses.some((c) => c.videoId === videoId));
     }
   }, [videoId]);
 
@@ -48,7 +61,8 @@ export default function Page() {
   }, [user, prevUser, view]);
 
   const validateYouTubeUrl = (url: string): boolean => {
-    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|v\/)|youtu\.be\/)[\w-]+/;
+    const youtubeRegex =
+      /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|v\/)|youtu\.be\/)[\w-]+/;
     return youtubeRegex.test(url);
   };
 
@@ -76,19 +90,24 @@ export default function Page() {
 
       setVideoId(id);
 
-      const fetchedTranscript = await fetchTranscript(id);
+      const { transcript: fetchedTranscript, title } =
+        await fetchTranscript(id);
       setTranscript(fetchedTranscript);
 
       const analysis = await analyzeTranscript(fetchedTranscript);
 
       setConcepts(analysis.concepts);
-      setTasks(analysis.tasks.map(t => ({ ...t, completed: false })));
-      setVideoTitle(`Video ${id}`);
+      setTasks(analysis.tasks.map((t) => ({ ...t, completed: false })));
+      setVideoTitle(title);
 
       setView("dashboard");
     } catch (err) {
       console.error("Error processing video:", err);
-      setError(err instanceof Error ? err.message : "Failed to process video. Please try again.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to process video. Please try again.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -107,9 +126,9 @@ export default function Page() {
   };
 
   const handleToggleTask = (id: string) => {
-    setTasks(prev => {
-      const newTasks = prev.map(task =>
-        task.id === id ? { ...task, completed: !task.completed } : task
+    setTasks((prev) => {
+      const newTasks = prev.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task,
       );
 
       if (isSaved && videoId) {
@@ -186,9 +205,7 @@ export default function Page() {
           </div>
 
           {error && (
-            <p className="text-red-500 text-sm mt-3 text-center">
-              {error}
-            </p>
+            <p className="text-red-500 text-sm mt-3 text-center">{error}</p>
           )}
         </form>
       </div>
