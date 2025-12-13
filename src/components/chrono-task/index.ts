@@ -6,6 +6,7 @@ export { TaskPanel } from "./TaskPanel";
 export { TaskItem } from "./TaskItem";
 export type { Task } from "./TaskItem";
 export { ProgressRing } from "./ProgressRing";
+export { TaskSummaryModal } from "./TaskSummaryModal";
 export { LearningDashboard } from "./LearningDashboard";
 export { AskWidget } from "./AskWidget";
 export { LibraryModal } from "./LibraryModal";

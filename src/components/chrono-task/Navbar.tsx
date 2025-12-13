@@ -16,7 +16,7 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 p-1.5 sm:p-2">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white/95 backdrop-blur-md rounded-full px-4 py-2 shadow-sm border border-slate-100 flex items-center justify-between gap-3">
+        <div className="bg-white/95 backdrop-blur-md rounded-full px-4 py-2 shadow-sm border border-slate-100 flex items-center justify-between gap-2">
           <div className="flex items-center shrink-0">
             <Image
               src="/logo.png"
@@ -28,7 +28,7 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
             />
           </div>
 
-          <div className="hidden sm:flex items-center gap-1">
+          <div className="hidden sm:flex items-center gap-4">
             <Button
               variant="ghost"
               size="sm"
@@ -39,7 +39,7 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
             </Button>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-4 shrink-0">
             {isLoading ? (
               <div className="w-8 h-8 rounded-full bg-slate-100 animate-pulse" />
             ) : user ? (
@@ -62,7 +62,7 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
                   <span className="hidden sm:inline">New</span>
                 </Button>
 
-                <div className="flex items-center pl-1">
+                <div className="flex items-center pl-4">
                   <UserButton />
                 </div>
               </>
