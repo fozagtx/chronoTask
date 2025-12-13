@@ -9,3 +9,4 @@ export { ProgressRing } from "./ProgressRing";
 export { LearningDashboard } from "./LearningDashboard";
 export { LibraryModal } from "./LibraryModal";
 export { SlidesModal } from "./SlidesModal";
+export { CivicAuthModal } from "./CivicAuthModal";

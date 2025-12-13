@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useUser } from "@civic/auth/react";
-import { Navbar, HeroSection, LearningDashboard, Task, LibraryModal, SlidesModal } from "@/components/chrono-task";
+import { Navbar, HeroSection, LearningDashboard, Task, LibraryModal, SlidesModal, CivicAuthModal } from "@/components/chrono-task";
 import { extractVideoId, fetchTranscript } from "@/lib/youtube";
 import { analyzeTranscript } from "@/lib/openai";
 import { saveCourse, updateCourseProgress, getSavedCourses, SavedCourse } from "@/lib/storage";
@@ -23,7 +23,9 @@ export default function Page() {
   const [isSaved, setIsSaved] = useState(false);
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const [isSlidesOpen, setIsSlidesOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [url, setUrl] = useState("");
+  const [prevUser, setPrevUser] = useState<typeof user>(null);
 
   // Check if current course is saved
   useEffect(() => {
@@ -33,12 +35,17 @@ export default function Page() {
     }
   }, [videoId]);
 
-  // Redirect to input view when user logs in
+  // Show auth modal and redirect to input view when user logs in
   useEffect(() => {
-    if (user && view === "hero") {
-      setView("input");
+    if (user && !prevUser) {
+      // User just logged in - show the auth modal
+      setIsAuthModalOpen(true);
+      if (view === "hero") {
+        setView("input");
+      }
     }
-  }, [user, view]);
+    setPrevUser(user);
+  }, [user, prevUser, view]);
 
   const validateYouTubeUrl = (url: string): boolean => {
     const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|v\/)|youtu\.be\/)[\w-]+/;
@@ -223,6 +230,12 @@ export default function Page() {
         concepts={concepts}
         tasks={tasks}
         videoTitle={videoTitle}
+      />
+
+      <CivicAuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        user={user}
       />
     </main>
   );
