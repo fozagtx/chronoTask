@@ -18,15 +18,15 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
     <nav className="fixed top-0 left-0 right-0 z-50 p-2">
       <div className="max-w-md mx-auto">
         {/* Rounded container */}
-        <div className="bg-white/95 backdrop-blur-md rounded-full px-2 py-1 shadow-sm border border-slate-100 flex items-center justify-between">
+        <div className="bg-white/95 backdrop-blur-md rounded-full px-4 py-2 shadow-sm border border-slate-100 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
             <Image
               src="/logo.png"
               alt="LearnLM"
-              width={100}
-              height={28}
-              className="h-7 w-auto"
+              width={140}
+              height={40}
+              className="h-10 w-auto"
             />
           </div>
 

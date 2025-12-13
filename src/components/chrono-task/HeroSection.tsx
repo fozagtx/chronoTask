@@ -135,9 +135,9 @@ export function HeroSection() {
               <Image
                 src="/logo.png"
                 alt="LearnLM"
-                width={100}
-                height={28}
-                className="h-7 w-auto"
+                width={140}
+                height={40}
+                className="h-10 w-auto"
               />
             </div>
             <p className="text-slate-400 text-sm">
