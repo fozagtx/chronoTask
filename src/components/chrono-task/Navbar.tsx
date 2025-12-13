@@ -77,7 +77,7 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
               </>
             ) : (
               <Button
-                onClick={() => signIn("modal")}
+                onClick={() => signIn({ displayMode: "iframe", iframeMode: "modal" })}
                 className="rounded-full px-5 h-8 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium"
               >
                 Sign In
