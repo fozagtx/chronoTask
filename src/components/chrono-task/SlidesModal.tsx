@@ -202,13 +202,13 @@ export function SlidesModal({
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden animate-float-in">
+      <div className="relative mx-4 flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl animate-float-in sm:mx-0">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
+        <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 p-3 sm:p-4">
           <div className="flex items-center gap-3">
             <FileText className="w-5 h-5 text-orange-500" />
             <span className="font-medium text-slate-900">Slides Preview</span>
-            <span className="text-sm text-slate-500">
+            <span className="hidden text-sm text-slate-500 sm:inline">
               {currentSlide + 1} / {slides.length}
             </span>
           </div>
@@ -216,14 +216,15 @@ export function SlidesModal({
             <Button
               onClick={exportToPDF}
               disabled={isExporting}
-              className="bg-orange-500 hover:bg-orange-600 text-white"
+              size="sm"
+              className="bg-orange-500 text-white hover:bg-orange-600"
             >
               {isExporting ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin sm:mr-2" />
               ) : (
-                <Download className="w-4 h-4 mr-2" />
+                <Download className="h-4 w-4 sm:mr-2" />
               )}
-              Export PDF
+              <span className="hidden sm:inline">Export PDF</span>
             </Button>
             <button
               onClick={onClose}
@@ -235,22 +236,30 @@ export function SlidesModal({
         </div>
 
         {/* Slide Content */}
-        <div className="aspect-video bg-gradient-to-br from-slate-50 to-slate-100 p-12 flex flex-col justify-center">
+        <div className="flex flex-1 flex-col justify-center overflow-y-auto bg-gradient-to-br from-slate-50 to-slate-100 p-6 sm:p-12">
           <h2
-            className={`font-bold text-slate-900 mb-8 ${currentSlide === 0 ? "text-4xl text-center" : "text-3xl"}`}
+            className={`mb-6 font-bold text-slate-900 sm:mb-8 ${
+              currentSlide === 0
+                ? "text-center text-2xl sm:text-4xl"
+                : "text-xl sm:text-3xl"
+            }`}
           >
             {slide.title}
           </h2>
           <ul
-            className={`space-y-4 ${currentSlide === 0 ? "text-center" : ""}`}
+            className={`space-y-3 sm:space-y-4 ${
+              currentSlide === 0 ? "text-center" : ""
+            }`}
           >
             {slide.content.map((item, index) => (
               <li
                 key={index}
-                className={`text-xl text-slate-700 ${currentSlide === 0 ? "" : "flex items-start gap-3"}`}
+                className={`text-base text-slate-700 sm:text-xl ${
+                  currentSlide === 0 ? "" : "flex items-start gap-3"
+                }`}
               >
                 {currentSlide !== 0 && (
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mt-2.5 flex-shrink-0" />
+                  <span className="mt-2.5 h-2 w-2 flex-shrink-0 rounded-full bg-orange-500" />
                 )}
                 {item}
               </li>
@@ -259,26 +268,27 @@ export function SlidesModal({
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center justify-between p-4 border-t border-slate-200 bg-slate-50">
+        <div className="flex items-center justify-between border-t border-slate-200 bg-slate-50 p-3 sm:p-4">
           <Button
             variant="ghost"
+            size="sm"
             onClick={prevSlide}
             disabled={currentSlide === 0}
             className="text-slate-600"
           >
-            <ChevronLeft className="w-4 h-4 mr-1" />
-            Previous
+            <ChevronLeft className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Previous</span>
           </Button>
 
           {/* Slide indicators */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex max-w-[50vw] items-center gap-1.5 overflow-x-auto sm:max-w-none">
             {slides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`w-2 h-2 rounded-full transition-all ${
+                className={`h-2 w-2 flex-shrink-0 rounded-full transition-all ${
                   index === currentSlide
-                    ? "bg-orange-500 w-6"
+                    ? "w-6 bg-orange-500"
                     : "bg-slate-300 hover:bg-slate-400"
                 }`}
               />
@@ -287,12 +297,13 @@ export function SlidesModal({
 
           <Button
             variant="ghost"
+            size="sm"
             onClick={nextSlide}
             disabled={currentSlide === slides.length - 1}
             className="text-slate-600"
           >
-            Next
-            <ChevronRight className="w-4 h-4 ml-1" />
+            <span className="hidden sm:inline">Next</span>
+            <ChevronRight className="h-4 w-4 sm:ml-1" />
           </Button>
         </div>
       </div>

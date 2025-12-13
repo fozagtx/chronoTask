@@ -31,7 +31,7 @@ export function LearningDashboard({
   isSaved = false,
 }: LearningDashboardProps) {
   return (
-    <div className="min-h-screen bg-slate-50 pt-20 pb-8 px-6">
+    <div className="min-h-screen bg-slate-50 pt-16 pb-6 px-4 sm:pt-20 sm:pb-8 sm:px-6">
       <div className="max-w-7xl mx-auto">
         {/* Action Bar - Pill shaped container */}
         <div className="flex items-center justify-end mb-4">
@@ -69,7 +69,7 @@ export function LearningDashboard({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-6 h-[calc(100vh-10rem)]">
+        <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-4 sm:gap-6 lg:h-[calc(100vh-10rem)]">
           {/* Left Panel - Video (40%) */}
           <div className="animate-float-in">
             <VideoPanel videoId={videoId} concepts={concepts} />

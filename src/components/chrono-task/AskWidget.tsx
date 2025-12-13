@@ -105,15 +105,15 @@ export function AskWidget(props: {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button
-          className="fixed bottom-6 right-6 z-40 h-12 rounded-full bg-orange-500 text-white shadow-lg hover:bg-orange-600"
+          className="fixed bottom-4 right-4 z-40 h-12 rounded-full bg-orange-500 text-white shadow-lg hover:bg-orange-600 sm:bottom-6 sm:right-6"
           aria-label="Ask a question"
         >
-          <MessageCircle className="mr-2 h-5 w-5" />
-          Ask
+          <MessageCircle className="h-5 w-5 sm:mr-2" />
+          <span className="hidden sm:inline">Ask</span>
         </Button>
       </SheetTrigger>
 
-      <SheetContent className="flex w-[420px] flex-col p-0 sm:w-[420px]">
+      <SheetContent className="flex w-[92vw] max-w-[420px] flex-col p-0 sm:w-[420px]">
         <SheetHeader className="border-b border-slate-200 p-4">
           <SheetTitle className="text-slate-900">Ask a question</SheetTitle>
         </SheetHeader>

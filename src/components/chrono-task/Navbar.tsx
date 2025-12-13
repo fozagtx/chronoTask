@@ -23,7 +23,7 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
               alt="LearnLM"
               width={180}
               height={52}
-              className="h-10 w-auto"
+              className="h-9 w-auto sm:h-10"
               priority
             />
           </div>
@@ -48,18 +48,18 @@ export function Navbar({ onNewCourse, onOpenLibrary }: NavbarProps) {
                   variant="ghost"
                   size="sm"
                   onClick={onOpenLibrary}
-                  className="rounded-full px-2.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  className="rounded-full px-2.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                 >
-                  <Library className="w-4 h-4 mr-1" />
-                  Library
+                  <Library className="h-4 w-4 sm:mr-1" />
+                  <span className="hidden sm:inline">Library</span>
                 </Button>
                 <Button
                   size="sm"
                   onClick={onNewCourse}
-                  className="rounded-full px-2.5 bg-orange-500 hover:bg-orange-600 text-white"
+                  className="rounded-full bg-orange-500 px-2.5 text-white hover:bg-orange-600"
                 >
-                  <Plus className="w-4 h-4 mr-1" />
-                  New
+                  <Plus className="h-4 w-4 sm:mr-1" />
+                  <span className="hidden sm:inline">New</span>
                 </Button>
 
                 <div className="flex items-center pl-1">
