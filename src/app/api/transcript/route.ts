@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { YouTubeTranscriptApi } from '@playzone/youtube-transcript';
+
+// Force dynamic rendering to prevent build-time execution
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -13,6 +15,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    // Dynamic import to prevent CLI side effects during build
+    const { YouTubeTranscriptApi } = await import('@playzone/youtube-transcript');
+
     const api = new YouTubeTranscriptApi();
     const fetchedTranscript = await api.fetch(videoId);
 
@@ -21,7 +26,7 @@ export async function GET(request: NextRequest) {
     }
 
     const transcript = fetchedTranscript.snippets
-      .map((snippet) => snippet.text)
+      .map((snippet: { text: string }) => snippet.text)
       .join(' ')
       .replace(/\s+/g, ' ')
       .trim();
