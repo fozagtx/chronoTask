@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { YoutubeTranscript } from 'youtube-transcript';
+import { Innertube } from 'youtubei.js';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -13,16 +13,25 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Use youtube-transcript package - simpler and more reliable
-    const transcriptItems = await YoutubeTranscript.fetchTranscript(videoId);
+    // Use youtubei.js (Innertube) - more reliable as it uses YouTube's internal API
+    // instead of scraping HTML which gets blocked by YouTube
+    const youtube = await Innertube.create();
 
-    if (!transcriptItems || transcriptItems.length === 0) {
+    // Fetch the video info
+    const info = await youtube.getInfo(videoId);
+
+    // Get the transcript data
+    const transcriptData = await info.getTranscript();
+
+    if (!transcriptData?.transcript?.content?.body?.initial_segments) {
       throw new Error('No transcript available for this video');
     }
 
-    // Combine all transcript segments into a single text
-    const transcript = transcriptItems
-      .map((item: { text: string }) => item.text)
+    // Extract text from transcript segments
+    const segments = transcriptData.transcript.content.body.initial_segments;
+    const transcript = segments
+      .map((segment: { snippet?: { text?: string } }) => segment.snippet?.text || '')
+      .filter((text: string) => text.length > 0)
       .join(' ')
       .replace(/\s+/g, ' ')
       .trim();
