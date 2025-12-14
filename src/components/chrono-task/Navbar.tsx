@@ -22,15 +22,16 @@ export function Navbar({
     <nav className="fixed top-0 left-0 right-0 z-50 p-1.5 sm:p-2">
       <div className="flex justify-center">
         <div className="bg-white/95 backdrop-blur-md rounded-full px-3 py-1.5 shadow-lg shadow-slate-300/50 border border-slate-100 flex items-center gap-2">
-          <div className="flex items-center shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
             <Image
               src="/app-icon.svg"
               alt="LearnLM"
-              width={40}
-              height={40}
-              className="h-9 w-9 sm:h-10 sm:w-10"
+              width={28}
+              height={28}
+              className="h-7 w-7"
               priority
             />
+            <span className="font-semibold text-slate-800 text-sm">LearnLM</span>
           </div>
 
           <div className="flex items-center gap-1.5 shrink-0">
