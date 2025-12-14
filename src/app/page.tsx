@@ -11,6 +11,7 @@ import {
   SlidesModal,
   CivicAuthModal,
   ChatWidget,
+  BackgroundGradient,
 } from "@/components/chrono-task";
 import {
   extractVideoId,
@@ -193,18 +194,21 @@ export default function Page() {
 
   // Render URL input view
   const renderInputView = () => (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-50" />
+    <div className="relative min-h-screen overflow-hidden bg-slate-50 dark:bg-slate-900">
+      {/* Premium gradient background */}
+      <BackgroundGradient />
+
+      {/* Main content layer */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-slate-900 text-center mb-2 tracking-tight">
+        <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-50 text-center mb-2 tracking-tight">
           Create new study plan
         </h2>
-        <p className="text-slate-500 text-center mb-8">
+        <p className="text-slate-500 dark:text-slate-400 text-center mb-8">
           Paste a YouTube video URL to get started
         </p>
 
         <form onSubmit={handleSubmit} className="w-full max-w-xl">
-          <div className="flex flex-col items-stretch gap-2 bg-white rounded-2xl shadow-lg shadow-slate-200/50 p-2 border border-slate-100 sm:flex-row sm:items-center sm:rounded-full">
+          <div className="flex flex-col items-stretch gap-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 p-2 border border-slate-100/50 dark:border-slate-700/50 sm:flex-row sm:items-center sm:rounded-full">
             <Input
               type="text"
               placeholder="Paste YouTube URL here..."
@@ -214,7 +218,7 @@ export default function Page() {
                 setError("");
               }}
               disabled={isLoading}
-              className="h-12 w-full border-0 bg-transparent px-4 text-base placeholder:text-slate-400 shadow-none focus-visible:ring-0 sm:flex-1 sm:rounded-full disabled:opacity-50"
+              className="h-12 w-full border-0 bg-transparent px-4 text-base placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-none focus-visible:ring-0 sm:flex-1 sm:rounded-full disabled:opacity-50"
             />
             <Button
               type="submit"
@@ -234,7 +238,7 @@ export default function Page() {
 
           {isLoading && (
             <div className="mt-6 text-center">
-              <TextShimmer className="text-sm text-slate-600">
+              <TextShimmer className="text-sm text-slate-600 dark:text-slate-400">
                 Processing your YouTube URL... Analyzing transcript and
                 generating study plan
               </TextShimmer>

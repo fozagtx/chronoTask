@@ -13,3 +13,4 @@ export { LibraryModal } from "./LibraryModal";
 export { SlidesModal } from "./SlidesModal";
 export { CivicAuthModal } from "./CivicAuthModal";
 export { ChatWidget } from "./ChatWidget";
+export { BackgroundGradient } from "./BackgroundGradient";
