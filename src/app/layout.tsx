@@ -16,6 +16,10 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "LearnLM - Turn Videos into Action",
   description: "Transform educational videos into actionable study plans with AI-generated task breakdowns",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/app-icon.svg",
+  },
 };
 
 export default function RootLayout({

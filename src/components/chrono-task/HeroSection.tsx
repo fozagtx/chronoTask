@@ -11,6 +11,7 @@ import {
   BarChart3,
 } from "lucide-react";
 import Image from "next/image";
+import youtubeIcon from "/public/youtube-icon.svg";
 import {
   Accordion,
   AccordionContent,
@@ -29,10 +30,13 @@ export function HeroSection() {
         {/* Headline */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 text-center mb-4 tracking-tight">
           Turn{" "}
-          <span className="inline-flex items-center align-baseline" aria-hidden>
-            <Youtube
-              className="w-[1em] h-[1em] text-red-500"
-              fill="currentColor"
+          <span className="inline-flex items-center align-middle" aria-hidden>
+            <Image
+              src={youtubeIcon}
+              alt=""
+              width={56}
+              height={40}
+              className="w-[1.4em] h-[1em]"
             />
           </span>
           <span className="sr-only">YouTube </span> videos into action
@@ -254,11 +258,11 @@ export function HeroSection() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center">
               <Image
-                src="/logo.png"
+                src="/app-icon.svg"
                 alt="LearnLM"
-                width={180}
-                height={52}
-                className="h-12 w-auto"
+                width={48}
+                height={48}
+                className="h-10 w-10"
               />
             </div>
             <p className="text-slate-400 text-sm">
