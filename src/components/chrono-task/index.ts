@@ -12,3 +12,4 @@ export { AskWidget } from "./AskWidget";
 export { LibraryModal } from "./LibraryModal";
 export { SlidesModal } from "./SlidesModal";
 export { CivicAuthModal } from "./CivicAuthModal";
+export { ChatWidget } from "./ChatWidget";

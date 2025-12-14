@@ -10,6 +10,7 @@ import {
   LibraryModal,
   SlidesModal,
   CivicAuthModal,
+  ChatWidget,
 } from "@/components/chrono-task";
 import {
   extractVideoId,
@@ -26,6 +27,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Loader2 } from "lucide-react";
+import { TextShimmer } from "@/components/prompt-kit";
 
 export default function Page() {
   const { user } = useUser();
@@ -41,6 +43,7 @@ export default function Page() {
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const [isSlidesOpen, setIsSlidesOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [url, setUrl] = useState("");
   const [prevUser, setPrevUser] = useState<typeof user>(null);
 
@@ -210,7 +213,8 @@ export default function Page() {
                 setUrl(e.target.value);
                 setError("");
               }}
-              className="h-12 w-full border-0 bg-transparent px-4 text-base placeholder:text-slate-400 shadow-none focus-visible:ring-0 sm:flex-1 sm:rounded-full"
+              disabled={isLoading}
+              className="h-12 w-full border-0 bg-transparent px-4 text-base placeholder:text-slate-400 shadow-none focus-visible:ring-0 sm:flex-1 sm:rounded-full disabled:opacity-50"
             />
             <Button
               type="submit"
@@ -228,6 +232,15 @@ export default function Page() {
             </Button>
           </div>
 
+          {isLoading && (
+            <div className="mt-6 text-center">
+              <TextShimmer className="text-sm text-slate-600">
+                Processing your YouTube URL... Analyzing transcript and
+                generating study plan
+              </TextShimmer>
+            </div>
+          )}
+
           {error && (
             <p className="text-red-500 text-sm mt-3 text-center">{error}</p>
           )}
@@ -241,6 +254,7 @@ export default function Page() {
       <Navbar
         onNewCourse={handleNewCourse}
         onOpenLibrary={() => setIsLibraryOpen(true)}
+        onOpenChat={() => setIsChatOpen(true)}
       />
 
       {!user || view === "hero" ? (
@@ -273,6 +287,16 @@ export default function Page() {
         concepts={concepts}
         tasks={tasks}
         videoTitle={videoTitle}
+      />
+
+      <ChatWidget
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        context={{
+          transcript,
+          concepts,
+          videoTitle,
+        }}
       />
 
       <CivicAuthModal
