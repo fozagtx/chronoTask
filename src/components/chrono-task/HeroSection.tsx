@@ -18,17 +18,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { BackgroundGradient } from "./BackgroundGradient";
 
 export function HeroSection() {
   return (
-    <div className="bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-50" />
+    <div className="relative overflow-hidden bg-slate-50 dark:bg-slate-900">
+      {/* Premium gradient background */}
+      <BackgroundGradient />
 
       {/* Hero Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-[50vh] px-6 pt-24 pb-8">
         {/* Headline */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 text-center mb-4 tracking-tight">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-slate-50 text-center mb-4 tracking-tight">
           Turn{" "}
           <span className="inline-flex items-center align-middle" aria-hidden>
             <Image
@@ -43,7 +44,7 @@ export function HeroSection() {
         </h1>
 
         {/* Subheadline */}
-        <p className="text-lg text-slate-500 text-center max-w-md">
+        <p className="text-lg text-slate-500 dark:text-slate-400 text-center max-w-md">
           Transform YouTube videos into personalized study plans
         </p>
       </div>
