@@ -9,6 +9,7 @@ import {
   BookOpen,
   Clock,
   BarChart3,
+  ArrowRight,
 } from "lucide-react";
 import Image from "next/image";
 import youtubeIcon from "/public/youtube-icon.svg";
@@ -19,6 +20,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { BackgroundGradient } from "./BackgroundGradient";
+import { TextShimmer } from "@/components/prompt-kit";
 
 export function HeroSection() {
   return (
@@ -28,6 +30,16 @@ export function HeroSection() {
 
       {/* Hero Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-[50vh] px-6 pt-24 pb-8">
+        {/* Backed by badge */}
+        <div className="mb-6">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm px-4 py-2 border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+            <TextShimmer className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              Backed by designpxd
+            </TextShimmer>
+            <ArrowRight className="w-4 h-4 text-orange-500" />
+          </div>
+        </div>
+
         {/* Headline */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-slate-50 text-center mb-4 tracking-tight">
           Turn{" "}
