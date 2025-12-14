@@ -34,12 +34,14 @@ export function Navbar({
             <span className="font-semibold text-slate-800 text-sm">LearnLM</span>
           </div>
 
-          <a
-            href="#faqs"
-            className="hidden sm:inline-flex items-center rounded-full px-3 h-8 text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
-          >
-            FAQ
-          </a>
+          {!user && (
+            <a
+              href="#faqs"
+              className="hidden sm:inline-flex items-center rounded-full px-3 h-8 text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+            >
+              FAQ
+            </a>
+          )}
 
           <div className="flex items-center gap-1.5 shrink-0">
             {isLoading ? (
