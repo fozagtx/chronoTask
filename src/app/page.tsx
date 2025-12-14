@@ -235,7 +235,8 @@ export default function Page() {
           {isLoading && (
             <div className="mt-6 text-center">
               <TextShimmer className="text-sm text-slate-600">
-                Processing your YouTube URL... Analyzing transcript and generating study plan
+                Processing your YouTube URL... Analyzing transcript and
+                generating study plan
               </TextShimmer>
             </div>
           )}

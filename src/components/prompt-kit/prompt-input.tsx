@@ -1,48 +1,46 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 interface PromptInputContextValue {
-  value: string
-  onValueChange: (value: string) => void
-  isLoading: boolean
-  onSubmit: () => void
+  value: string;
+  onValueChange: (value: string) => void;
+  isLoading: boolean;
+  onSubmit: () => void;
 }
 
-const PromptInputContext = React.createContext<PromptInputContextValue | undefined>(undefined)
+const PromptInputContext = React.createContext<
+  PromptInputContextValue | undefined
+>(undefined);
 
 const usePromptInputContext = () => {
-  const context = React.useContext(PromptInputContext)
+  const context = React.useContext(PromptInputContext);
   if (!context) {
-    throw new Error("usePromptInputContext must be used within PromptInput")
+    throw new Error("usePromptInputContext must be used within PromptInput");
   }
-  return context
-}
+  return context;
+};
 
 interface PromptInputProps extends PromptInputContextValue {
-  children: React.ReactNode
-  className?: string
+  children: React.ReactNode;
+  className?: string;
 }
 
-export const PromptInput = React.forwardRef<
-  HTMLDivElement,
-  PromptInputProps
->(
-  (
-    { value, onValueChange, isLoading, onSubmit, children, className },
-    ref,
-  ) => {
+export const PromptInput = React.forwardRef<HTMLDivElement, PromptInputProps>(
+  ({ value, onValueChange, isLoading, onSubmit, children, className }, ref) => {
     return (
-      <PromptInputContext.Provider value={{ value, onValueChange, isLoading, onSubmit }}>
+      <PromptInputContext.Provider
+        value={{ value, onValueChange, isLoading, onSubmit }}
+      >
         <div ref={ref} className={cn("flex flex-col gap-3", className)}>
           {children}
         </div>
       </PromptInputContext.Provider>
-    )
+    );
   },
-)
-PromptInput.displayName = "PromptInput"
+);
+PromptInput.displayName = "PromptInput";
 
 interface PromptInputTextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
@@ -51,7 +49,7 @@ export const PromptInputTextarea = React.forwardRef<
   HTMLTextAreaElement,
   PromptInputTextareaProps
 >(({ className, placeholder, ...props }, ref) => {
-  const { value, onValueChange } = usePromptInputContext()
+  const { value, onValueChange } = usePromptInputContext();
 
   return (
     <textarea
@@ -65,9 +63,9 @@ export const PromptInputTextarea = React.forwardRef<
       )}
       {...props}
     />
-  )
-})
-PromptInputTextarea.displayName = "PromptInputTextarea"
+  );
+});
+PromptInputTextarea.displayName = "PromptInputTextarea";
 
 interface PromptInputActionsProps
   extends React.HTMLAttributes<HTMLDivElement> {}
@@ -76,19 +74,12 @@ export const PromptInputActions = React.forwardRef<
   HTMLDivElement,
   PromptInputActionsProps
 >(({ className, ...props }, ref) => {
-  return (
-    <div
-      ref={ref}
-      className={cn("flex gap-2", className)}
-      {...props}
-    />
-  )
-})
-PromptInputActions.displayName = "PromptInputActions"
+  return <div ref={ref} className={cn("flex gap-2", className)} {...props} />;
+});
+PromptInputActions.displayName = "PromptInputActions";
 
-interface PromptInputActionProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  tooltip?: string
+interface PromptInputActionProps extends React.HTMLAttributes<HTMLDivElement> {
+  tooltip?: string;
 }
 
 export const PromptInputAction = React.forwardRef<
@@ -104,6 +95,6 @@ export const PromptInputAction = React.forwardRef<
     >
       {children}
     </div>
-  )
-})
-PromptInputAction.displayName = "PromptInputAction"
+  );
+});
+PromptInputAction.displayName = "PromptInputAction";

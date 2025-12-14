@@ -11,7 +11,11 @@ interface NavbarProps {
   onOpenChat?: () => void;
 }
 
-export function Navbar({ onNewCourse, onOpenLibrary, onOpenChat }: NavbarProps) {
+export function Navbar({
+  onNewCourse,
+  onOpenLibrary,
+  onOpenChat,
+}: NavbarProps) {
   const { user, signIn, isLoading } = useUser();
 
   return (

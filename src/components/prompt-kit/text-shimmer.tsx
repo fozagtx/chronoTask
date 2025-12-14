@@ -1,11 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-interface TextShimmerProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode
+interface TextShimmerProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
 }
 
 export const TextShimmer = React.forwardRef<HTMLDivElement, TextShimmerProps>(
@@ -13,10 +12,7 @@ export const TextShimmer = React.forwardRef<HTMLDivElement, TextShimmerProps>(
     return (
       <div
         ref={ref}
-        className={cn(
-          "relative inline-block",
-          className,
-        )}
+        className={cn("relative inline-block", className)}
         {...props}
       >
         <div
@@ -37,7 +33,7 @@ export const TextShimmer = React.forwardRef<HTMLDivElement, TextShimmerProps>(
           }
         `}</style>
       </div>
-    )
+    );
   },
-)
-TextShimmer.displayName = "TextShimmer"
+);
+TextShimmer.displayName = "TextShimmer";

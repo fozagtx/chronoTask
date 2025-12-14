@@ -3,5 +3,5 @@ export {
   PromptInputTextarea,
   PromptInputActions,
   PromptInputAction,
-} from "./prompt-input"
-export { TextShimmer } from "./text-shimmer"
+} from "./prompt-input";
+export { TextShimmer } from "./text-shimmer";

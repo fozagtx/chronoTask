@@ -1,14 +1,14 @@
 export interface ChatMessage {
-  id: string
-  role: "user" | "assistant"
-  content: string
-  timestamp: Date
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
 }
 
 export interface ChatContextData {
-  transcript?: string
-  concepts?: string[]
-  videoTitle?: string
+  transcript?: string;
+  concepts?: string[];
+  videoTitle?: string;
 }
 
 export async function sendChatMessage(
@@ -31,16 +31,13 @@ export async function sendChatMessage(
         content: msg.content,
       })),
     }),
-  })
+  });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}))
-    throw new Error(
-      errorData.error ||
-        "Failed to send message",
-    )
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || "Failed to send message");
   }
 
-  const data = (await response.json()) as { message?: string }
-  return data.message || ""
+  const data = (await response.json()) as { message?: string };
+  return data.message || "";
 }

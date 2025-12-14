@@ -103,7 +103,9 @@ src/
 ## Key Components
 
 ### ChatWidget
+
 Interactive chat interface with:
+
 - Message history
 - AI responses with web search integration
 - Avatar support for user/assistant messages
@@ -111,14 +113,18 @@ Interactive chat interface with:
 - Context-aware responses based on current video
 
 ### PromptInput
+
 Flexible input component with:
+
 - Textarea with auto-height
 - Custom action buttons
 - Loading state management
 - Keyboard shortcuts
 
 ### TextShimmer
+
 Visual feedback component showing:
+
 - Loading states during YouTube processing
 - Smooth shimmer animation effect
 
@@ -133,6 +139,7 @@ Visual feedback component showing:
 ## Features in Detail
 
 ### YouTube to Study Plan Conversion
+
 1. User pastes YouTube URL
 2. App fetches video transcript
 3. AI analyzes content for key concepts
@@ -140,6 +147,7 @@ Visual feedback component showing:
 5. User can save course to personal library
 
 ### Learning Assistant Chat
+
 - Ask questions about current video content
 - Get answers based on transcript and context
 - Ask general questions with web search fallback
@@ -147,6 +155,7 @@ Visual feedback component showing:
 - AI understands the context of your learning
 
 ### Progress Tracking
+
 - Mark tasks as complete
 - Visual progress ring showing completion percentage
 - Save progress to browser storage
@@ -155,6 +164,7 @@ Visual feedback component showing:
 ## Development
 
 ### Build & Run
+
 ```bash
 npm run dev      # Start dev server
 npm run build    # Build for production
@@ -162,6 +172,7 @@ npm start        # Run production build
 ```
 
 ### Code Style
+
 - Follow existing TypeScript conventions
 - Use Tailwind CSS classes for styling
 - Component files use .tsx extension
@@ -170,6 +181,7 @@ npm start        # Run production build
 ## Browser Storage
 
 The app uses browser localStorage to persist:
+
 - Saved courses and their content
 - Task completion progress
 - User learning history
