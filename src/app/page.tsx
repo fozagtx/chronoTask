@@ -47,6 +47,9 @@ export default function Page() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [url, setUrl] = useState("");
   const [prevUser, setPrevUser] = useState<typeof user>(null);
+  const [rotatingWordIndex, setRotatingWordIndex] = useState(0);
+
+  const rotatingWords = ["plan", "tasks", "slides", "summary", "quiz"];
 
   // Check if current course is saved
   useEffect(() => {
@@ -67,6 +70,14 @@ export default function Page() {
     }
     setPrevUser(user);
   }, [user, prevUser, view]);
+
+  // Rotate headline words
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRotatingWordIndex((prev) => (prev + 1) % rotatingWords.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [rotatingWords.length]);
 
   const validateYouTubeUrl = (url: string): boolean => {
     const youtubeRegex =
@@ -201,7 +212,15 @@ export default function Page() {
       {/* Main content layer */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
         <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-50 text-center mb-2 tracking-tight">
-          Create new study plan
+          Create new study{" "}
+          <span className="relative inline-block min-w-[100px]">
+            <span
+              key={rotatingWordIndex}
+              className="inline-block text-orange-500 animate-[fadeSlideIn_0.4s_ease-out]"
+            >
+              {rotatingWords[rotatingWordIndex]}
+            </span>
+          </span>
         </h2>
         <p className="text-slate-500 dark:text-slate-400 text-center mb-8">
           Paste a YouTube video URL to get started
