@@ -55,7 +55,7 @@ export function HeroSection() {
             <div className="aspect-video relative">
               <iframe
                 className="w-full h-full"
-                src="https://www.youtube.com/embed/vTCyloUX238?autoplay=1&mute=1&loop=1&playlist=vTCyloUX238"
+                src="https://www.youtube.com/embed/HahyRY6H7TA?autoplay=1&mute=1&loop=1&playlist=HahyRY6H7TA"
                 title="Demo Video"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
