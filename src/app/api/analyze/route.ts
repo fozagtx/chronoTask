@@ -70,9 +70,30 @@ Make tasks specific and actionable. Time estimates should be realistic (5-30 min
     const jsonMatch = responseContent.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (jsonMatch) {
       jsonStr = jsonMatch[1];
+    } else {
+      // Try to find JSON object directly in response
+      const objectMatch = responseContent.match(/\{[\s\S]*\}/);
+      if (objectMatch) {
+        jsonStr = objectMatch[0];
+      }
     }
 
-    const analysis = JSON.parse(jsonStr.trim());
+    let analysis;
+    try {
+      analysis = JSON.parse(jsonStr.trim());
+    } catch {
+      console.error("Failed to parse JSON from response:", responseContent);
+      throw new Error(
+        "Failed to parse analysis response. The AI returned an invalid format."
+      );
+    }
+
+    // Validate expected structure
+    if (!analysis.concepts || !analysis.tasks) {
+      throw new Error(
+        "Invalid analysis format: missing concepts or tasks"
+      );
+    }
 
     return NextResponse.json(analysis);
   } catch (error: unknown) {

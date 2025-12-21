@@ -45,7 +45,8 @@ export async function analyzeDocument(
   });
 
   if (!response.ok) {
-    throw new Error("Failed to analyze document");
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || "Failed to analyze document");
   }
 
   return response.json();
