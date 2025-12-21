@@ -17,14 +17,7 @@ async function fetchTranscriptWithRetry(
   retries = MAX_RETRIES,
 ): Promise<{ transcript: string; title: string }> {
   // Dynamic import to avoid build-time execution
-  const { YouTubeTranscriptApi, GenericProxyConfig } = await import(
-    "@playzone/youtube-transcript"
-  );
-
-  const proxyUrl = process.env.YOUTUBE_TRANSCRIPT_PROXY;
-  const proxyConfig = proxyUrl
-    ? new GenericProxyConfig(proxyUrl, proxyUrl)
-    : undefined;
+  const { fetchTranscript } = await import("youtube-transcript-plus");
 
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
@@ -32,20 +25,23 @@ async function fetchTranscriptWithRetry(
         `Attempting to fetch transcript (attempt ${attempt + 1}/${retries + 1})...`,
       );
 
-      // Create API instance with optional proxy configuration
-      const api = new YouTubeTranscriptApi(proxyConfig);
+      // Fetch transcript using youtube-transcript-plus
+      const transcriptData = await fetchTranscript(videoId, {
+        lang: "en",
+      });
 
-      // Fetch transcript using @playzone/youtube-transcript
-      const transcriptData = await api.fetch(videoId);
-
-      if (!transcriptData || !transcriptData.snippets?.length) {
+      if (
+        !transcriptData ||
+        !Array.isArray(transcriptData) ||
+        transcriptData.length === 0
+      ) {
         throw new Error("No transcript data received");
       }
 
       // Extract and format transcript text from snippets
-      const transcript = transcriptData.snippets
-        .map((segment) => segment.text)
-        .filter((text) => text && text.length > 0)
+      const transcript = transcriptData
+        .map((segment: { text: string }) => segment.text)
+        .filter((text: string) => text && text.length > 0)
         .join(" ")
         .replace(/\s+/g, " ")
         .trim();

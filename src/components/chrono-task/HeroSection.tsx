@@ -34,7 +34,7 @@ export function HeroSection() {
         <div className="mb-6">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm px-4 py-2 border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
             <TextShimmer className="text-sm font-medium text-slate-700 dark:text-slate-300">
-              Backed by designpxd
+              Backed by bolt.new • minimax
             </TextShimmer>
             <ArrowRight className="w-4 h-4 text-orange-500" />
           </div>
