@@ -1,6 +1,6 @@
 "use client";
 
-import { VideoPanel } from "./VideoPanel";
+import { DocumentPanel } from "./DocumentPanel";
 import { TaskPanel } from "./TaskPanel";
 import { Task } from "./TaskItem";
 import { AskWidget } from "./AskWidget";
@@ -8,25 +8,28 @@ import { Button } from "@/components/ui/button";
 import { Bookmark, Presentation, Check } from "lucide-react";
 
 interface LearningDashboardProps {
-  videoId: string;
+  documentId: string;
+  fileName: string;
+  pageCount?: number;
   concepts: string[];
   tasks: Task[];
-  transcript?: string;
-  videoTitle?: string;
+  content?: string;
+  documentTitle?: string;
   onToggleTask: (id: string) => void;
-  onSaveCourse: () => void;
+  onSaveDocument: () => void;
   onOpenSlides: () => void;
   isSaved?: boolean;
 }
 
 export function LearningDashboard({
-  videoId,
+  fileName,
+  pageCount,
   concepts,
   tasks,
-  transcript,
-  videoTitle,
+  content,
+  documentTitle,
   onToggleTask,
-  onSaveCourse,
+  onSaveDocument,
   onOpenSlides,
   isSaved = false,
 }: LearningDashboardProps) {
@@ -47,7 +50,7 @@ export function LearningDashboard({
             </Button>
             <Button
               size="sm"
-              onClick={onSaveCourse}
+              onClick={onSaveDocument}
               className={`rounded-full px-4 h-9 transition-all duration-200 ${
                 isSaved
                   ? "bg-green-500 hover:bg-green-600 text-white"
@@ -70,9 +73,13 @@ export function LearningDashboard({
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-4 sm:gap-6 lg:h-[calc(100vh-10rem)]">
-          {/* Left Panel - Video (40%) */}
+          {/* Left Panel - Document Info (40%) */}
           <div className="animate-float-in">
-            <VideoPanel videoId={videoId} concepts={concepts} />
+            <DocumentPanel
+              fileName={fileName}
+              pageCount={pageCount}
+              concepts={concepts}
+            />
           </div>
 
           {/* Right Panel - Tasks (60%) */}
@@ -81,16 +88,16 @@ export function LearningDashboard({
               tasks={tasks}
               onToggleTask={onToggleTask}
               concepts={concepts}
-              transcript={transcript}
+              content={content}
             />
           </div>
         </div>
       </div>
 
       <AskWidget
-        transcript={transcript}
+        content={content}
         concepts={concepts}
-        videoTitle={videoTitle}
+        documentTitle={documentTitle}
       />
     </div>
   );

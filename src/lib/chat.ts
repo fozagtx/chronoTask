@@ -6,15 +6,15 @@ export interface ChatMessage {
 }
 
 export interface ChatContextData {
-  transcript?: string;
+  content?: string;
   concepts?: string[];
-  videoTitle?: string;
+  documentTitle?: string;
 }
 
 export async function sendChatMessage(
   message: string,
   context: ChatContextData,
-  history: ChatMessage[],
+  history: ChatMessage[]
 ): Promise<string> {
   const response = await fetch("/api/chat", {
     method: "POST",
@@ -23,9 +23,9 @@ export async function sendChatMessage(
     },
     body: JSON.stringify({
       message,
-      transcript: context.transcript,
+      content: context.content,
       concepts: context.concepts,
-      videoTitle: context.videoTitle,
+      documentTitle: context.documentTitle,
       history: history.map((msg) => ({
         role: msg.role,
         content: msg.content,

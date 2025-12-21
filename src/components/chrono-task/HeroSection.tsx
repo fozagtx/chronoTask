@@ -2,7 +2,7 @@
 
 import {
   ListChecks,
-  Youtube,
+  FileText,
   Brain,
   Target,
   Zap,
@@ -10,6 +10,7 @@ import {
   Clock,
   BarChart3,
   ArrowRight,
+  Upload,
 } from "lucide-react";
 import Image from "next/image";
 import {
@@ -33,7 +34,7 @@ export function HeroSection() {
         <div className="mb-6">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm px-4 py-2 border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
             <TextShimmer className="text-sm font-medium text-slate-700 dark:text-slate-300">
-              Backed by bolt.new • minimax
+              Powered by bolt.new • MiniMax
             </TextShimmer>
             <ArrowRight className="w-4 h-4 text-orange-500" />
           </div>
@@ -43,36 +44,30 @@ export function HeroSection() {
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-slate-50 text-center mb-4 tracking-tight">
           Turn{" "}
           <span className="inline-flex items-center align-middle" aria-hidden>
-            <Image
-              src="/youtube-icon.svg"
-              alt=""
-              width={56}
-              height={40}
-              className="w-[1.4em] h-[1em]"
-            />
+            <FileText className="w-[1.2em] h-[1em] text-orange-500" />
           </span>
-          <span className="sr-only">YouTube </span> videos into action
+          <span className="sr-only">PDF </span> documents into action
         </h1>
 
         {/* Subheadline */}
         <p className="text-lg text-slate-500 dark:text-slate-400 text-center max-w-md">
-          Transform YouTube videos into personalized study plans
+          Transform PDF documents into personalized study plans with AI
         </p>
       </div>
 
-      {/* Demo Video Card */}
+      {/* Demo Card */}
       <div className="relative z-10 px-6 pb-16">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-slate-900 rounded-2xl overflow-hidden shadow-2xl shadow-slate-900/20">
-            <div className="aspect-video relative">
-              <iframe
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/HahyRY6H7TA?autoplay=1&mute=1&loop=1&playlist=HahyRY6H7TA"
-                title="Demo Video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl overflow-hidden shadow-2xl shadow-orange-900/20 p-8">
+            <div className="flex flex-col items-center text-center text-white">
+              <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-6">
+                <Upload className="w-10 h-10 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold mb-2">Upload Any PDF</h3>
+              <p className="text-orange-100 max-w-md">
+                Drop your study materials, research papers, or any educational PDF
+                and get an AI-generated study plan with actionable tasks
+              </p>
             </div>
           </div>
         </div>
@@ -85,7 +80,7 @@ export function HeroSection() {
             Features
           </h2>
           <p className="text-slate-500 text-center mb-10 max-w-lg mx-auto">
-            Everything you need to transform passive video watching into active
+            Everything you need to transform passive reading into active
             learning
           </p>
 
@@ -118,7 +113,7 @@ export function HeroSection() {
               </div>
               <h3 className="font-semibold text-slate-900 mb-1">Save Time</h3>
               <p className="text-slate-500 text-sm">
-                No more rewatching videos
+                No more re-reading documents
               </p>
             </div>
 
@@ -146,14 +141,15 @@ export function HeroSection() {
             {/* Step 1 - Large */}
             <div className="md:col-span-2 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
               <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center mb-4">
-                <Youtube className="w-5 h-5 text-orange-500" />
+                <Upload className="w-5 h-5 text-orange-500" />
               </div>
               <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                1. Paste a YouTube URL
+                1. Upload a PDF
               </h3>
               <p className="text-slate-500 text-sm">
-                Drop any educational video link and our AI will analyze the
-                content, extracting key concepts and learning objectives.
+                Drop any educational document, research paper, or study material
+                and our AI will analyze the content, extracting key concepts and
+                learning objectives.
               </p>
             </div>
 
@@ -188,7 +184,7 @@ export function HeroSection() {
                 4. Track Progress
               </h3>
               <p className="text-slate-500 text-sm">
-                Check off tasks as you complete them, save courses to your
+                Check off tasks as you complete them, save documents to your
                 library, and build a consistent learning habit with visual
                 progress tracking.
               </p>
@@ -204,8 +200,7 @@ export function HeroSection() {
             FAQs
           </h2>
           <p className="text-slate-500 text-center mb-10 max-w-xl mx-auto">
-            Everything you need to know before turning YouTube videos into a
-            study plan.
+            Everything you need to know about turning PDFs into a study plan.
           </p>
 
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
@@ -215,28 +210,30 @@ export function HeroSection() {
                   What does ChronoTask (LearnLM) do?
                 </AccordionTrigger>
                 <AccordionContent className="text-slate-500">
-                  Paste a YouTube link and the app extracts key concepts and
+                  Upload a PDF document and the app extracts key concepts and
                   generates an actionable checklist so you can learn by doing.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-2" className="px-6">
                 <AccordionTrigger className="text-left">
-                  Which YouTube videos are supported?
+                  Which PDF files are supported?
                 </AccordionTrigger>
                 <AccordionContent className="text-slate-500">
-                  Most public educational videos work. If a video has captions
-                  available, the results are usually best.
+                  Most text-based PDFs work great. Scanned documents or image-only
+                  PDFs may not work as well since we need to extract text content.
+                  Maximum file size is 10MB.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-3" className="px-6">
                 <AccordionTrigger className="text-left">
-                  Do you save my videos or progress?
+                  Do you save my documents or progress?
                 </AccordionTrigger>
                 <AccordionContent className="text-slate-500">
-                  Your saved courses and task progress are stored locally in
-                  your browser so you can pick up where you left off.
+                  Your saved documents and task progress are stored locally in
+                  your browser so you can pick up where you left off. We don&apos;t
+                  store your PDF files on our servers.
                 </AccordionContent>
               </AccordionItem>
 
@@ -278,7 +275,7 @@ export function HeroSection() {
               />
             </div>
             <p className="text-slate-400 text-sm">
-              Transform how you learn from videos
+              Transform how you learn from documents
             </p>
             <p className="text-slate-400 text-xs">
               &copy; {new Date().getFullYear()} LearnLM

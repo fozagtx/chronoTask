@@ -3,54 +3,58 @@ import OpenAI from "openai";
 
 export async function POST(request: NextRequest) {
   try {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = process.env.MINIMAX_API_KEY;
 
     if (!apiKey) {
-      console.error("OPENAI_API_KEY is not configured");
+      console.error("MINIMAX_API_KEY is not configured");
       return NextResponse.json(
-        { error: "OpenAI API key is not configured" },
-        { status: 500 },
+        { error: "MiniMax API key is not configured" },
+        { status: 500 }
       );
     }
 
-    const { question, transcript, concepts, videoTitle } = (await request
+    const { question, content, concepts, documentTitle } = (await request
       .json()
       .catch(() => ({}))) as {
       question?: string;
-      transcript?: string;
+      content?: string;
       concepts?: string[];
-      videoTitle?: string;
+      documentTitle?: string;
     };
 
     if (!question?.trim()) {
       return NextResponse.json(
         { error: "Question is required" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
-    const truncatedTranscript = (transcript || "").slice(0, 15000);
+    const truncatedContent = (content || "").slice(0, 15000);
     const conceptList = (concepts || []).slice(0, 15).filter(Boolean);
 
-    const openai = new OpenAI({ apiKey });
+    // Configure OpenAI client for MiniMax API
+    const client = new OpenAI({
+      apiKey,
+      baseURL: "https://api.minimax.io/v1",
+    });
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+    const completion = await client.chat.completions.create({
+      model: "MiniMax-M2",
       messages: [
         {
           role: "system",
           content:
-            'You are a helpful tutor. Answer the user\'s question using the provided video context. If the answer is not supported by the context, say what is missing and answer generally without inventing specific details. Keep it concise and actionable. Respond ONLY as JSON: { "answer": "..." }.',
+            'You are a helpful tutor. Answer the user\'s question using the provided document context. If the answer is not supported by the context, say what is missing and answer generally without inventing specific details. Keep it concise and actionable. Respond ONLY as JSON: { "answer": "..." }.',
         },
         {
           role: "user",
           content: [
-            videoTitle ? `Video title: ${videoTitle}` : null,
+            documentTitle ? `Document title: ${documentTitle}` : null,
             conceptList.length
               ? `Key concepts: ${conceptList.join("; ")}`
               : null,
-            truncatedTranscript
-              ? `Transcript excerpt: ${truncatedTranscript}`
+            truncatedContent
+              ? `Document excerpt: ${truncatedContent}`
               : null,
             `Question: ${question}`,
           ]
@@ -58,16 +62,22 @@ export async function POST(request: NextRequest) {
             .join("\n\n"),
         },
       ],
-      response_format: { type: "json_object" },
       temperature: 0.4,
     });
 
-    const content = completion.choices[0]?.message?.content;
-    if (!content) {
-      throw new Error("No response from OpenAI");
+    const responseContent = completion.choices[0]?.message?.content;
+    if (!responseContent) {
+      throw new Error("No response from MiniMax");
     }
 
-    const parsed = JSON.parse(content) as { answer?: string };
+    // Extract JSON from response (handle potential markdown code blocks)
+    let jsonStr = responseContent;
+    const jsonMatch = responseContent.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (jsonMatch) {
+      jsonStr = jsonMatch[1];
+    }
+
+    const parsed = JSON.parse(jsonStr.trim()) as { answer?: string };
 
     return NextResponse.json({ answer: parsed.answer ?? "" });
   } catch (error: unknown) {
