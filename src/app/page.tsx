@@ -216,9 +216,16 @@ export default function Page() {
             </span>
           </span>
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 text-center mb-8">
+        <p className="text-slate-500 dark:text-slate-400 text-center mb-4">
           Upload a PDF document to get started
         </p>
+
+        {/* YouTube API Notice */}
+        <div className="w-full max-w-xl mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+          <p className="text-blue-700 dark:text-blue-300 text-sm text-center font-medium">
+            ⓘ YouTube API is currently experiencing issues. Please use PDF upload for now.
+          </p>
+        </div>
 
         <div className="w-full max-w-xl">
           <div
