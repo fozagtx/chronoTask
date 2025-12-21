@@ -5,6 +5,9 @@ import {
   GenericProxyConfig,
 } from "@playzone/youtube-transcript";
 
+// Force dynamic rendering to prevent build-time timeout
+export const dynamic = "force-dynamic";
+
 // Retry configuration
 const MAX_RETRIES = 3;
 const INITIAL_RETRY_DELAY = 1000; // 1 second
