@@ -281,7 +281,11 @@ export async function GET(request: NextRequest) {
     // Try primary method with retries
     try {
       const result = await fetchTranscriptWithRetry(videoId);
-      return NextResponse.json(result);
+      return NextResponse.json({
+        success: true,
+        hasTranscript: true,
+        ...result,
+      });
     } catch (primaryError) {
       const primaryErrorMessage =
         primaryError instanceof Error ? primaryError.message : "Unknown error";
@@ -291,7 +295,11 @@ export async function GET(request: NextRequest) {
 
       // Try fallback method
       const result = await fetchTranscriptWithYoutubeJS(videoId);
-      return NextResponse.json(result);
+      return NextResponse.json({
+        success: true,
+        hasTranscript: true,
+        ...result,
+      });
     }
   } catch (error) {
     const classified = classifyTranscriptError(error);
@@ -303,16 +311,29 @@ export async function GET(request: NextRequest) {
     }
 
     const body: {
+      success: false;
+      hasTranscript: false;
       error: string;
       code: TranscriptErrorCode;
       details?: string;
     } = {
+      success: false,
+      hasTranscript: false,
       error: classified.userMessage,
       code: classified.code,
     };
 
     if (process.env.NODE_ENV !== "production") {
       body.details = classified.rawMessage;
+    }
+
+    // Return 200 for missing captions to avoid browser console 404 errors
+    // Only return error status codes for actual server/network errors
+    if (
+      classified.code === "MISSING_CAPTIONS" ||
+      classified.code === "VIDEO_NOT_FOUND"
+    ) {
+      return NextResponse.json(body, { status: 200 });
     }
 
     return NextResponse.json(body, { status: classified.status });

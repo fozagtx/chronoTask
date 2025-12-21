@@ -42,9 +42,32 @@ export async function fetchTranscript(
   }
 
   const data = (await response.json()) as {
+    success?: boolean;
+    hasTranscript?: boolean;
     transcript?: string;
     title?: string;
+    error?: string;
+    code?: string;
   };
+
+  // Handle the case where no transcript is available
+  if (data.success === false || data.hasTranscript === false) {
+    const errorMessage =
+      data.error || "No captions/transcript are available for this video.";
+
+    // Provide helpful context based on the error code
+    if (data.code === "MISSING_CAPTIONS") {
+      throw new Error(
+        `${errorMessage}\n\nThis video doesn't have captions enabled. Please try another video with closed captions available.`,
+      );
+    } else if (data.code === "VIDEO_NOT_FOUND") {
+      throw new Error(
+        `${errorMessage}\n\nThe video may be private, removed, or unavailable. Please check the URL and try again.`,
+      );
+    }
+
+    throw new Error(errorMessage);
+  }
 
   if (data.transcript) {
     const resolvedTitle = isPlaceholderTitle(data.title, videoId)
