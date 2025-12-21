@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Innertube } from "youtubei.js";
-import {
-  YouTubeTranscriptApi,
-  GenericProxyConfig,
-} from "@playzone/youtube-transcript";
 
 // Force dynamic rendering to prevent build-time timeout
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 // Retry configuration
 const MAX_RETRIES = 3;
@@ -20,6 +16,11 @@ async function fetchTranscriptWithRetry(
   videoId: string,
   retries = MAX_RETRIES,
 ): Promise<{ transcript: string; title: string }> {
+  // Dynamic import to avoid build-time execution
+  const { YouTubeTranscriptApi, GenericProxyConfig } = await import(
+    "@playzone/youtube-transcript"
+  );
+
   const proxyUrl = process.env.YOUTUBE_TRANSCRIPT_PROXY;
   const proxyConfig = proxyUrl
     ? new GenericProxyConfig(proxyUrl, proxyUrl)
@@ -56,9 +57,7 @@ async function fetchTranscriptWithRetry(
       // Fetch video title from YouTube oEmbed API
       const title = await fetchVideoTitle(videoId);
 
-      console.log(
-        `Successfully fetched transcript on attempt ${attempt + 1}`,
-      );
+      console.log(`Successfully fetched transcript on attempt ${attempt + 1}`);
       return { transcript, title };
     } catch (error) {
       const errorMessage =
@@ -87,12 +86,18 @@ async function fetchTranscriptWithYoutubeJS(videoId: string): Promise<{
 }> {
   console.log("Attempting fallback to youtubei.js...");
 
+  // Dynamic import to avoid build-time execution
+  const { Innertube } = await import("youtubei.js");
+
   const youtube = await Innertube.create();
   const info = await youtube.getInfo(videoId);
 
   // Get title
-  const title =
-    (info.basic_info.title || (await fetchVideoTitle(videoId)) || "").trim();
+  const title = (
+    info.basic_info.title ||
+    (await fetchVideoTitle(videoId)) ||
+    ""
+  ).trim();
 
   // Get transcript
   const transcriptData = await info.getTranscript();
@@ -154,9 +159,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(result);
     } catch (primaryError) {
       const primaryErrorMessage =
-        primaryError instanceof Error
-          ? primaryError.message
-          : "Unknown error";
+        primaryError instanceof Error ? primaryError.message : "Unknown error";
       console.warn(
         `Primary method failed: ${primaryErrorMessage}. Trying fallback...`,
       );
@@ -173,7 +176,10 @@ export async function GET(request: NextRequest) {
     // Provide helpful error messages
     let userMessage = `Failed to fetch transcript: ${errorMessage}.`;
 
-    if (errorMessage.includes("disabled") || errorMessage.includes("captions")) {
+    if (
+      errorMessage.includes("disabled") ||
+      errorMessage.includes("captions")
+    ) {
       userMessage += " This video may not have captions available.";
     } else if (
       errorMessage.includes("blocked") ||
