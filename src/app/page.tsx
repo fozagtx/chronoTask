@@ -265,7 +265,11 @@ export default function Page() {
           )}
 
           {error && (
-            <p className="text-red-500 text-sm mt-3 text-center">{error}</p>
+            <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+              <p className="text-red-600 dark:text-red-400 text-sm text-center whitespace-pre-line">
+                {error}
+              </p>
+            </div>
           )}
         </form>
       </div>
