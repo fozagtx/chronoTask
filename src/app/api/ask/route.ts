@@ -70,14 +70,29 @@ export async function POST(request: NextRequest) {
       throw new Error("No response from MiniMax");
     }
 
+    // Strip any <think>...</think> tags from the response (chain-of-thought)
+    let cleanedResponse = responseContent.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+
     // Extract JSON from response (handle potential markdown code blocks)
-    let jsonStr = responseContent;
-    const jsonMatch = responseContent.match(/```(?:json)?\s*([\s\S]*?)```/);
+    let jsonStr = cleanedResponse;
+    const jsonMatch = cleanedResponse.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (jsonMatch) {
       jsonStr = jsonMatch[1];
+    } else {
+      // Try to find JSON object directly in response
+      const objectMatch = cleanedResponse.match(/\{[\s\S]*\}/);
+      if (objectMatch) {
+        jsonStr = objectMatch[0];
+      }
     }
 
-    const parsed = JSON.parse(jsonStr.trim()) as { answer?: string };
+    let parsed: { answer?: string };
+    try {
+      parsed = JSON.parse(jsonStr.trim());
+    } catch {
+      console.error("Failed to parse JSON from response:", responseContent);
+      throw new Error("Failed to parse answer response");
+    }
 
     return NextResponse.json({ answer: parsed.answer ?? "" });
   } catch (error: unknown) {
