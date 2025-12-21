@@ -65,14 +65,17 @@ Make tasks specific and actionable. Time estimates should be realistic (5-30 min
       throw new Error("No response from MiniMax");
     }
 
+    // Strip any <think>...</think> tags from the response (chain-of-thought)
+    let cleanedResponse = responseContent.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+
     // Extract JSON from response (handle potential markdown code blocks)
-    let jsonStr = responseContent;
-    const jsonMatch = responseContent.match(/```(?:json)?\s*([\s\S]*?)```/);
+    let jsonStr = cleanedResponse;
+    const jsonMatch = cleanedResponse.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (jsonMatch) {
       jsonStr = jsonMatch[1];
     } else {
       // Try to find JSON object directly in response
-      const objectMatch = responseContent.match(/\{[\s\S]*\}/);
+      const objectMatch = cleanedResponse.match(/\{[\s\S]*\}/);
       if (objectMatch) {
         jsonStr = objectMatch[0];
       }

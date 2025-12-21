@@ -114,7 +114,10 @@ Be helpful, concise, and actionable. If you're not sure about something, say so 
       max_tokens: 1000,
     });
 
-    const responseContent = response.choices[0]?.message?.content || "";
+    let responseContent = response.choices[0]?.message?.content || "";
+
+    // Strip any <think>...</think> tags from the response (chain-of-thought)
+    responseContent = responseContent.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
 
     return NextResponse.json({ message: responseContent });
   } catch (error: unknown) {
