@@ -12,7 +12,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Image from "next/image";
-import youtubeIcon from "/public/youtube-icon.svg";
 import {
   Accordion,
   AccordionContent,
@@ -45,7 +44,7 @@ export function HeroSection() {
           Turn{" "}
           <span className="inline-flex items-center align-middle" aria-hidden>
             <Image
-              src={youtubeIcon}
+              src="/youtube-icon.svg"
               alt=""
               width={56}
               height={40}
