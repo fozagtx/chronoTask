@@ -13,7 +13,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { askQuestion } from "@/lib/openai";
+import { askQuestion } from "@/lib/pdf";
 import { cn } from "@/lib/utils";
 
 type ChatMessage = {
@@ -30,11 +30,11 @@ function makeId() {
 }
 
 export function AskWidget(props: {
-  transcript?: string;
+  content?: string;
   concepts?: string[];
-  videoTitle?: string;
+  documentTitle?: string;
 }) {
-  const { transcript, concepts, videoTitle } = props;
+  const { content, concepts, documentTitle } = props;
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -43,7 +43,7 @@ export function AskWidget(props: {
       id: makeId(),
       role: "assistant",
       content:
-        "Ask me a question about this video and I’ll help you understand it.",
+        "Ask me a question about this document and I'll help you understand it.",
     },
   ]);
 
@@ -54,9 +54,9 @@ export function AskWidget(props: {
   }, [messages, open]);
 
   const placeholder = useMemo(() => {
-    if (videoTitle?.trim()) return `Ask about “${videoTitle.trim()}”...`;
-    return "Ask a question about this topic...";
-  }, [videoTitle]);
+    if (documentTitle?.trim()) return `Ask about "${documentTitle.trim()}"...`;
+    return "Ask a question about this document...";
+  }, [documentTitle]);
 
   const send = async () => {
     const question = input.trim();
@@ -76,9 +76,9 @@ export function AskWidget(props: {
     try {
       const res = await askQuestion({
         question,
-        transcript,
+        content,
         concepts,
-        videoTitle,
+        documentTitle,
       });
 
       setMessages((prev) => [
@@ -87,7 +87,7 @@ export function AskWidget(props: {
           id: makeId(),
           role: "assistant",
           content:
-            res.answer || "I couldn’t generate an answer. Try rephrasing.",
+            res.answer || "I couldn't generate an answer. Try rephrasing.",
         },
       ]);
     } catch (e) {
@@ -127,7 +127,7 @@ export function AskWidget(props: {
                   "max-w-[90%] rounded-2xl px-3 py-2 text-sm leading-relaxed",
                   m.role === "user"
                     ? "ml-auto bg-orange-500 text-white"
-                    : "mr-auto bg-slate-100 text-slate-800",
+                    : "mr-auto bg-slate-100 text-slate-800"
                 )}
               >
                 {m.content}
@@ -165,7 +165,7 @@ export function AskWidget(props: {
             </Button>
           </div>
           <p className="mt-2 text-xs text-slate-500">
-            Answers are generated from the transcript and may be imperfect.
+            Answers are generated from the document content and may be imperfect.
           </p>
         </div>
       </SheetContent>

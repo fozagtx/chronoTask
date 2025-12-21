@@ -90,8 +90,8 @@ export function ChatWidget({ isOpen, onClose, context }: ChatWidgetProps) {
                 Learning Assistant
               </h2>
               <p className="text-xs text-slate-500">
-                {context?.videoTitle
-                  ? `Discussing: ${context.videoTitle}`
+                {context?.documentTitle
+                  ? `Discussing: ${context.documentTitle}`
                   : "Ask me anything"}
               </p>
             </div>

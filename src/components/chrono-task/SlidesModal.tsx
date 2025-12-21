@@ -21,7 +21,7 @@ interface SlidesModalProps {
   onClose: () => void;
   concepts: string[];
   tasks: { id: string; title: string; duration: string }[];
-  videoTitle?: string;
+  documentTitle?: string;
 }
 
 export function SlidesModal({
@@ -29,7 +29,7 @@ export function SlidesModal({
   onClose,
   concepts,
   tasks,
-  videoTitle,
+  documentTitle,
 }: SlidesModalProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isExporting, setIsExporting] = useState(false);
@@ -37,7 +37,7 @@ export function SlidesModal({
   // Generate slides from concepts and tasks
   const slides: Slide[] = [
     {
-      title: videoTitle || "Study Plan Overview",
+      title: documentTitle || "Study Plan Overview",
       content: [
         `${concepts.length} Key Concepts`,
         `${tasks.length} Action Items`,
@@ -80,7 +80,7 @@ export function SlidesModal({
         <!DOCTYPE html>
         <html>
         <head>
-          <title>${videoTitle || "Study Plan"} - Slides</title>
+          <title>${documentTitle || "Study Plan"} - Slides</title>
           <style>
             @page { size: landscape; margin: 0; }
             * { box-sizing: border-box; margin: 0; padding: 0; }

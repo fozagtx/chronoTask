@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useUser } from "@civic/auth/react";
 import {
   Navbar,
@@ -13,56 +13,52 @@ import {
   ChatWidget,
   BackgroundGradient,
 } from "@/components/chrono-task";
+import { uploadPDF, analyzeDocument } from "@/lib/pdf";
 import {
-  extractVideoId,
-  fetchTranscript,
-  fetchVideoTitle,
-} from "@/lib/youtube";
-import { analyzeTranscript } from "@/lib/openai";
-import {
-  saveCourse,
-  updateCourseProgress,
-  getSavedCourses,
-  SavedCourse,
+  saveDocument,
+  updateDocumentProgress,
+  getSavedDocuments,
+  SavedDocument,
 } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2, Upload, FileText } from "lucide-react";
 import { TextShimmer } from "@/components/prompt-kit";
 
 export default function Page() {
   const { user } = useUser();
   const [view, setView] = useState<"hero" | "input" | "dashboard">("hero");
   const [isLoading, setIsLoading] = useState(false);
-  const [videoId, setVideoId] = useState<string>("");
+  const [documentId, setDocumentId] = useState<string>("");
+  const [fileName, setFileName] = useState<string>("");
+  const [pageCount, setPageCount] = useState<number | undefined>();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [concepts, setConcepts] = useState<string[]>([]);
   const [error, setError] = useState<string>("");
-  const [transcript, setTranscript] = useState<string>("");
-  const [videoTitle, setVideoTitle] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+  const [documentTitle, setDocumentTitle] = useState<string>("");
   const [isSaved, setIsSaved] = useState(false);
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const [isSlidesOpen, setIsSlidesOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [url, setUrl] = useState("");
   const [prevUser, setPrevUser] = useState<typeof user>(null);
   const [rotatingWordIndex, setRotatingWordIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const rotatingWords = ["plan", "tasks", "slides", "summary", "quiz"];
 
-  // Check if current course is saved
+  // Check if current document is saved
   useEffect(() => {
-    if (videoId) {
-      const courses = getSavedCourses();
-      setIsSaved(courses.some((c) => c.videoId === videoId));
+    if (documentId) {
+      const documents = getSavedDocuments();
+      setIsSaved(documents.some((d) => d.documentId === documentId));
     }
-  }, [videoId]);
+  }, [documentId]);
 
   // Show auth modal and redirect to input view when user logs in
   useEffect(() => {
     if (user && !prevUser) {
-      // User just logged in - show the auth modal
       setIsAuthModalOpen(true);
       if (view === "hero") {
         setView("input");
@@ -79,137 +75,135 @@ export default function Page() {
     return () => clearInterval(interval);
   }, [rotatingWords.length]);
 
-  const validateYouTubeUrl = (url: string): boolean => {
-    const youtubeRegex =
-      /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|v\/)|youtu\.be\/)[\w-]+/;
-    return youtubeRegex.test(url);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleFileUpload = async (file: File) => {
     setError("");
-
-    if (!url.trim()) {
-      setError("Please enter a YouTube URL");
-      return;
-    }
-
-    if (!validateYouTubeUrl(url)) {
-      setError("Please enter a valid YouTube URL");
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      const id = extractVideoId(url);
-      if (!id) {
-        throw new Error("Invalid YouTube URL");
-      }
+      // Upload and extract text
+      const uploadResult = await uploadPDF(file);
 
-      setVideoId(id);
+      setDocumentId(uploadResult.documentId);
+      setFileName(uploadResult.fileName);
+      setPageCount(uploadResult.pageCount);
+      setContent(uploadResult.text);
 
-      const { transcript: fetchedTranscript, title } =
-        await fetchTranscript(id);
-      setTranscript(fetchedTranscript);
-
-      const analysis = await analyzeTranscript(fetchedTranscript);
+      // Analyze the document
+      const analysis = await analyzeDocument(
+        uploadResult.text,
+        uploadResult.fileName
+      );
 
       setConcepts(analysis.concepts);
       setTasks(analysis.tasks.map((t) => ({ ...t, completed: false })));
-      setVideoTitle(title);
+      setDocumentTitle(uploadResult.fileName.replace(/\.pdf$/i, ""));
 
       setView("dashboard");
     } catch (err) {
-      console.error("Error processing video:", err);
+      console.error("Error processing PDF:", err);
       setError(
         err instanceof Error
           ? err.message
-          : "Failed to process video. Please try again.",
+          : "Failed to process PDF. Please try again."
       );
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleNewCourse = () => {
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      const file = files[0];
+      if (file.type === "application/pdf" || file.name.endsWith(".pdf")) {
+        handleFileUpload(file);
+      } else {
+        setError("Please upload a PDF file");
+      }
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      handleFileUpload(files[0]);
+    }
+  };
+
+  const handleNewDocument = () => {
     setView("input");
-    setVideoId("");
+    setDocumentId("");
+    setFileName("");
+    setPageCount(undefined);
     setTasks([]);
     setConcepts([]);
     setError("");
-    setTranscript("");
-    setVideoTitle("");
+    setContent("");
+    setDocumentTitle("");
     setIsSaved(false);
-    setUrl("");
   };
 
   const handleToggleTask = (id: string) => {
     setTasks((prev) => {
       const newTasks = prev.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task,
+        task.id === id ? { ...task, completed: !task.completed } : task
       );
 
-      if (isSaved && videoId) {
-        updateCourseProgress(videoId, newTasks);
+      if (isSaved && documentId) {
+        updateDocumentProgress(documentId, newTasks);
       }
 
       return newTasks;
     });
   };
 
-  const handleSaveCourse = () => {
-    if (!videoId) return;
+  const handleSaveDocument = () => {
+    if (!documentId) return;
 
-    saveCourse({
-      videoId,
-      title: videoTitle || `Video ${videoId}`,
+    saveDocument({
+      documentId,
+      fileName,
+      title: documentTitle || fileName,
       concepts,
       tasks,
-      transcript,
+      content,
+      pageCount,
     });
 
     setIsSaved(true);
   };
 
-  const handleSelectCourse = (course: SavedCourse) => {
-    setVideoId(course.videoId);
-    setVideoTitle(course.title);
-    setConcepts(course.concepts);
-    setTasks(course.tasks);
-    setTranscript(course.transcript || "");
+  const handleSelectDocument = (doc: SavedDocument) => {
+    setDocumentId(doc.documentId);
+    setFileName(doc.fileName);
+    setDocumentTitle(doc.title);
+    setPageCount(doc.pageCount);
+    setConcepts(doc.concepts);
+    setTasks(doc.tasks);
+    setContent(doc.content || "");
     setIsSaved(true);
     setIsLibraryOpen(false);
     setView("dashboard");
-
-    const maybePlaceholder =
-      !course.title?.trim() ||
-      course.title.trim() === `Video ${course.videoId}`;
-
-    if (maybePlaceholder) {
-      void (async () => {
-        const resolved = await fetchVideoTitle(course.videoId);
-        if (resolved) {
-          setVideoTitle(resolved);
-          saveCourse({
-            videoId: course.videoId,
-            title: resolved,
-            concepts: course.concepts,
-            tasks: course.tasks,
-            transcript: course.transcript,
-          });
-        }
-      })();
-    }
   };
 
-  // Render URL input view
+  // Render PDF upload input view
   const renderInputView = () => (
     <div className="relative min-h-screen overflow-hidden bg-slate-50 dark:bg-slate-900">
-      {/* Premium gradient background */}
       <BackgroundGradient />
 
-      {/* Main content layer */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
         <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-50 text-center mb-2 tracking-tight">
           Create new study{" "}
@@ -223,46 +217,61 @@ export default function Page() {
           </span>
         </h2>
         <p className="text-slate-500 dark:text-slate-400 text-center mb-8">
-          Paste a YouTube video URL to get started
+          Upload a PDF document to get started
         </p>
 
-        <form onSubmit={handleSubmit} className="w-full max-w-xl">
-          <div className="flex flex-col items-stretch gap-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 p-2 border border-slate-100/50 dark:border-slate-700/50 sm:flex-row sm:items-center sm:rounded-full">
-            <Input
-              type="text"
-              placeholder="Paste YouTube URL here..."
-              value={url}
-              onChange={(e) => {
-                setUrl(e.target.value);
-                setError("");
-              }}
+        <div className="w-full max-w-xl">
+          <div
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onClick={() => !isLoading && fileInputRef.current?.click()}
+            className={`relative flex flex-col items-center justify-center p-8 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 border-2 border-dashed transition-all duration-200 cursor-pointer ${
+              isDragging
+                ? "border-orange-500 bg-orange-50/80 dark:bg-orange-900/20"
+                : "border-slate-200 dark:border-slate-700 hover:border-orange-400"
+            } ${isLoading ? "pointer-events-none opacity-70" : ""}`}
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf,application/pdf"
+              onChange={handleFileInputChange}
               disabled={isLoading}
-              className="h-12 w-full border-0 bg-transparent px-4 text-base placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-none focus-visible:ring-0 sm:flex-1 sm:rounded-full disabled:opacity-50"
+              className="hidden"
             />
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="h-12 w-full rounded-xl bg-orange-500 px-6 font-medium text-white shadow-sm hover:bg-orange-600 sm:w-auto sm:rounded-full"
-            >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  Generate
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </>
-              )}
-            </Button>
-          </div>
 
-          {isLoading && (
-            <div className="mt-6 text-center">
-              <TextShimmer className="text-sm text-slate-600 dark:text-slate-400">
-                Processing your YouTube URL... Analyzing transcript and
-                generating study plan
-              </TextShimmer>
-            </div>
-          )}
+            {isLoading ? (
+              <div className="flex flex-col items-center">
+                <Loader2 className="w-12 h-12 text-orange-500 animate-spin mb-4" />
+                <TextShimmer className="text-sm text-slate-600 dark:text-slate-400">
+                  Processing your PDF... Analyzing content and generating study
+                  plan
+                </TextShimmer>
+              </div>
+            ) : (
+              <>
+                <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-2xl flex items-center justify-center mb-4">
+                  <Upload className="w-8 h-8 text-orange-500" />
+                </div>
+                <p className="text-lg font-medium text-slate-900 dark:text-slate-50 mb-2">
+                  Drop your PDF here
+                </p>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+                  or click to browse
+                </p>
+                <Button
+                  type="button"
+                  className="bg-orange-500 hover:bg-orange-600 text-white"
+                  disabled={isLoading}
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Select PDF
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </>
+            )}
+          </div>
 
           {error && (
             <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
@@ -271,7 +280,11 @@ export default function Page() {
               </p>
             </div>
           )}
-        </form>
+
+          <p className="mt-4 text-xs text-center text-slate-400 dark:text-slate-500">
+            Maximum file size: 10MB • PDF files only
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -279,7 +292,7 @@ export default function Page() {
   return (
     <main className="min-h-screen">
       <Navbar
-        onNewCourse={handleNewCourse}
+        onNewDocument={handleNewDocument}
         onOpenLibrary={() => setIsLibraryOpen(true)}
         onOpenChat={() => setIsChatOpen(true)}
       />
@@ -290,13 +303,15 @@ export default function Page() {
         renderInputView()
       ) : (
         <LearningDashboard
-          videoId={videoId}
+          documentId={documentId}
+          fileName={fileName}
+          pageCount={pageCount}
           concepts={concepts}
           tasks={tasks}
-          transcript={transcript}
-          videoTitle={videoTitle}
+          content={content}
+          documentTitle={documentTitle}
           onToggleTask={handleToggleTask}
-          onSaveCourse={handleSaveCourse}
+          onSaveDocument={handleSaveDocument}
           onOpenSlides={() => setIsSlidesOpen(true)}
           isSaved={isSaved}
         />
@@ -305,7 +320,7 @@ export default function Page() {
       <LibraryModal
         isOpen={isLibraryOpen}
         onClose={() => setIsLibraryOpen(false)}
-        onSelectCourse={handleSelectCourse}
+        onSelectDocument={handleSelectDocument}
       />
 
       <SlidesModal
@@ -313,16 +328,16 @@ export default function Page() {
         onClose={() => setIsSlidesOpen(false)}
         concepts={concepts}
         tasks={tasks}
-        videoTitle={videoTitle}
+        documentTitle={documentTitle}
       />
 
       <ChatWidget
         isOpen={isChatOpen}
         onClose={() => setIsChatOpen(false)}
         context={{
-          transcript,
+          content,
           concepts,
-          videoTitle,
+          documentTitle,
         }}
       />
 

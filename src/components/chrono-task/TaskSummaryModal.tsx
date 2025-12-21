@@ -13,7 +13,7 @@ interface TaskSummaryModalProps {
   onNext: () => void;
   hasNext: boolean;
   concepts?: string[];
-  transcript?: string;
+  content?: string;
 }
 
 export function TaskSummaryModal({
@@ -24,7 +24,7 @@ export function TaskSummaryModal({
   onNext,
   hasNext,
   concepts = [],
-  transcript,
+  content,
 }: TaskSummaryModalProps) {
   const [isCompleting, setIsCompleting] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -140,14 +140,14 @@ export function TaskSummaryModal({
               {isExpanded && (
                 <div className="mt-2 sm:mt-3 p-3 sm:p-4 bg-slate-50 rounded-lg">
                   <p className="text-slate-700 leading-relaxed text-sm sm:text-base">
-                    {transcript
+                    {content
                       ? "This task focuses on applying the concepts you've learned. Take your time to understand each step and ensure you grasp the underlying principles before moving forward."
                       : "This interactive task will help reinforce your understanding of the key concepts. Follow the steps carefully and don't hesitate to review the material if needed."}
                   </p>
-                  {transcript && (
+                  {content && (
                     <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-slate-200">
                       <p className="text-xs text-slate-500">
-                        Tip: Refer back to the video content if you need
+                        Tip: Refer back to the document content if you need
                         clarification on any concepts.
                       </p>
                     </div>

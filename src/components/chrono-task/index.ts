@@ -1,7 +1,7 @@
 export { Navbar } from "./Navbar";
 export { HeroSection } from "./HeroSection";
 export { FloatingCards } from "./FloatingCards";
-export { VideoPanel } from "./VideoPanel";
+export { DocumentPanel } from "./DocumentPanel";
 export { TaskPanel } from "./TaskPanel";
 export { TaskItem } from "./TaskItem";
 export type { Task } from "./TaskItem";

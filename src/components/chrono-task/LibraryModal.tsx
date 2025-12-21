@@ -1,39 +1,39 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Play, Trash2, Clock, CheckCircle } from "lucide-react";
+import { X, FileText, Trash2, Clock, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getSavedCourses, deleteCourse, SavedCourse } from "@/lib/storage";
+import { getSavedDocuments, deleteDocument, SavedDocument } from "@/lib/storage";
 
 interface LibraryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectCourse: (course: SavedCourse) => void;
+  onSelectDocument: (doc: SavedDocument) => void;
 }
 
 export function LibraryModal({
   isOpen,
   onClose,
-  onSelectCourse,
+  onSelectDocument,
 }: LibraryModalProps) {
-  const [courses, setCourses] = useState<SavedCourse[]>([]);
+  const [documents, setDocuments] = useState<SavedDocument[]>([]);
 
   useEffect(() => {
     if (isOpen) {
-      setCourses(getSavedCourses());
+      setDocuments(getSavedDocuments());
     }
   }, [isOpen]);
 
   const handleDelete = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    deleteCourse(id);
-    setCourses(getSavedCourses());
+    deleteDocument(id);
+    setDocuments(getSavedDocuments());
   };
 
-  const getProgress = (tasks: SavedCourse["tasks"]) => {
+  const getProgress = (tasks: SavedDocument["tasks"]) => {
     if (tasks.length === 0) return 0;
     return Math.round(
-      (tasks.filter((t) => t.completed).length / tasks.length) * 100,
+      (tasks.filter((t) => t.completed).length / tasks.length) * 100
     );
   };
 
@@ -64,52 +64,48 @@ export function LibraryModal({
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-          {courses.length === 0 ? (
+          {documents.length === 0 ? (
             <div className="text-center py-12">
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Play className="w-8 h-8 text-slate-400" />
+                <FileText className="w-8 h-8 text-slate-400" />
               </div>
               <h3 className="text-lg font-medium text-slate-900 mb-2">
-                No saved courses
+                No saved documents
               </h3>
               <p className="text-slate-500">
-                Generate a study plan and save it to your library
+                Upload a PDF and save it to your library
               </p>
             </div>
           ) : (
             <div className="space-y-3">
-              {courses.map((course) => {
-                const progress = getProgress(course.tasks);
+              {documents.map((doc) => {
+                const progress = getProgress(doc.tasks);
                 return (
                   <div
-                    key={course.id}
-                    onClick={() => onSelectCourse(course)}
+                    key={doc.id}
+                    onClick={() => onSelectDocument(doc)}
                     className="group p-4 bg-slate-50 rounded-xl hover:bg-slate-100 transition-all duration-200 cursor-pointer border border-transparent hover:border-slate-200"
                   >
                     <div className="flex items-start gap-4">
-                      {/* Thumbnail */}
-                      <div className="h-16 w-28 flex-shrink-0 overflow-hidden rounded-lg bg-slate-200 sm:h-20 sm:w-32">
-                        <img
-                          src={`https://img.youtube.com/vi/${course.videoId}/mqdefault.jpg`}
-                          alt={course.title}
-                          className="w-full h-full object-cover"
-                        />
+                      {/* Document Icon */}
+                      <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+                        <FileText className="w-8 h-8 text-white" />
                       </div>
 
                       {/* Info */}
                       <div className="flex-1 min-w-0">
                         <h3 className="font-medium text-slate-900 truncate mb-1">
-                          {course.title || "Untitled Course"}
+                          {doc.title || doc.fileName || "Untitled Document"}
                         </h3>
                         <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-500">
                           <span className="flex items-center gap-1">
                             <CheckCircle className="w-4 h-4" />
-                            {course.tasks.filter((t) => t.completed).length}/
-                            {course.tasks.length} tasks
+                            {doc.tasks.filter((t) => t.completed).length}/
+                            {doc.tasks.length} tasks
                           </span>
                           <span className="flex items-center gap-1">
                             <Clock className="w-4 h-4" />
-                            {new Date(course.updatedAt).toLocaleDateString()}
+                            {new Date(doc.updatedAt).toLocaleDateString()}
                           </span>
                         </div>
 
@@ -126,7 +122,7 @@ export function LibraryModal({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={(e) => handleDelete(course.id, e)}
+                        onClick={(e) => handleDelete(doc.id, e)}
                         className="text-slate-400 hover:bg-red-50 hover:text-red-500 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100"
                       >
                         <Trash2 className="w-4 h-4" />

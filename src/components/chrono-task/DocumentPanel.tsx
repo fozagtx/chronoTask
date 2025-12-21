@@ -1,32 +1,43 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Lightbulb } from "lucide-react";
+import { ChevronDown, ChevronUp, Lightbulb, FileText, FileCheck } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-interface VideoPanelProps {
-  videoId: string;
+interface DocumentPanelProps {
+  fileName: string;
+  pageCount?: number;
   concepts: string[];
 }
 
-export function VideoPanel({ videoId, concepts }: VideoPanelProps) {
+export function DocumentPanel({ fileName, pageCount, concepts }: DocumentPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="h-full flex flex-col gap-4">
-      {/* Video Embed */}
-      <div className="relative w-full aspect-video bg-slate-900 rounded-xl shadow-md overflow-hidden">
-        <iframe
-          src={`https://www.youtube.com/embed/${videoId}`}
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full"
-        />
+      {/* Document Info Card */}
+      <div className="relative w-full bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-md overflow-hidden p-6">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center">
+            <FileCheck className="w-8 h-8 text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-lg font-semibold text-white truncate">
+              {fileName}
+            </h3>
+            <p className="text-orange-100 text-sm">
+              {pageCount ? `${pageCount} page${pageCount > 1 ? "s" : ""}` : "PDF Document"}
+            </p>
+          </div>
+        </div>
+        <div className="mt-4 flex items-center gap-2 text-orange-100 text-sm">
+          <FileText className="w-4 h-4" />
+          <span>Document analyzed and ready for study</span>
+        </div>
       </div>
 
       {/* Key Concepts Card */}

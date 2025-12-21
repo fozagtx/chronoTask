@@ -1,38 +1,42 @@
-import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
 
 export async function POST(request: NextRequest) {
   try {
-    const apiKey = process.env.OPENAI_API_KEY;
-    
+    const apiKey = process.env.MINIMAX_API_KEY;
+
     if (!apiKey) {
-      console.error('OPENAI_API_KEY is not configured');
+      console.error("MINIMAX_API_KEY is not configured");
       return NextResponse.json(
-        { error: 'OpenAI API key is not configured' },
+        { error: "MiniMax API key is not configured" },
         { status: 500 }
       );
     }
 
-    const openai = new OpenAI({ apiKey });
+    // Configure OpenAI client for MiniMax API
+    const client = new OpenAI({
+      apiKey,
+      baseURL: "https://api.minimax.io/v1",
+    });
 
-    const { transcript } = await request.json();
+    const { content, documentTitle } = await request.json();
 
-    if (!transcript) {
+    if (!content) {
       return NextResponse.json(
-        { error: 'Transcript is required' },
+        { error: "Document content is required" },
         { status: 400 }
       );
     }
 
-    // Truncate transcript if too long (OpenAI has token limits)
-    const truncatedTranscript = transcript.slice(0, 15000);
+    // Truncate content if too long (token limits)
+    const truncatedContent = content.slice(0, 15000);
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+    const completion = await client.chat.completions.create({
+      model: "MiniMax-M2",
       messages: [
         {
-          role: 'system',
-          content: `You are an educational content analyzer. Given a video transcript, extract:
+          role: "system",
+          content: `You are an educational content analyzer. Given a document's text content, extract:
 1. Key concepts (5-7 main ideas/topics covered)
 2. Action tasks (6-10 actionable study tasks with time estimates)
 
@@ -48,29 +52,33 @@ Respond in JSON format:
 Make tasks specific and actionable. Time estimates should be realistic (5-30 min each).`,
         },
         {
-          role: 'user',
-          content: `Analyze this video transcript and create a study plan:\n\n${truncatedTranscript}`,
+          role: "user",
+          content: `Analyze this document${documentTitle ? ` titled "${documentTitle}"` : ""} and create a study plan:\n\n${truncatedContent}`,
         },
       ],
-      response_format: { type: 'json_object' },
       temperature: 0.7,
     });
 
-    const content = completion.choices[0]?.message?.content;
-    
-    if (!content) {
-      throw new Error('No response from OpenAI');
+    const responseContent = completion.choices[0]?.message?.content;
+
+    if (!responseContent) {
+      throw new Error("No response from MiniMax");
     }
 
-    const analysis = JSON.parse(content);
+    // Extract JSON from response (handle potential markdown code blocks)
+    let jsonStr = responseContent;
+    const jsonMatch = responseContent.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (jsonMatch) {
+      jsonStr = jsonMatch[1];
+    }
+
+    const analysis = JSON.parse(jsonStr.trim());
 
     return NextResponse.json(analysis);
   } catch (error: unknown) {
-    console.error('Error analyzing transcript:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Failed to analyze transcript';
-    return NextResponse.json(
-      { error: errorMessage },
-      { status: 500 }
-    );
+    console.error("Error analyzing document:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to analyze document";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

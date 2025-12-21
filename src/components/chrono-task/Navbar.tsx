@@ -6,13 +6,13 @@ import { useUser, UserButton } from "@civic/auth/react";
 import Image from "next/image";
 
 interface NavbarProps {
-  onNewCourse: () => void;
+  onNewDocument: () => void;
   onOpenLibrary: () => void;
   onOpenChat?: () => void;
 }
 
 export function Navbar({
-  onNewCourse,
+  onNewDocument,
   onOpenLibrary,
   onOpenChat,
 }: NavbarProps) {
@@ -70,7 +70,7 @@ export function Navbar({
                 </Button>
                 <Button
                   size="sm"
-                  onClick={onNewCourse}
+                  onClick={onNewDocument}
                   className="rounded-full bg-orange-500 px-2 h-8 text-white hover:bg-orange-600"
                 >
                   <Plus className="h-4 w-4 sm:mr-1" />

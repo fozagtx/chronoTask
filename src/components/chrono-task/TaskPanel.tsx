@@ -9,14 +9,14 @@ interface TaskPanelProps {
   tasks: Task[];
   onToggleTask: (id: string) => void;
   concepts?: string[];
-  transcript?: string;
+  content?: string;
 }
 
 export function TaskPanel({
   tasks,
   onToggleTask,
   concepts = [],
-  transcript,
+  content,
 }: TaskPanelProps) {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -108,7 +108,7 @@ export function TaskPanel({
             </div>
             <div>
               <p className="font-semibold text-slate-900 font-heading">
-                Course Complete! 🎉
+                Study Plan Complete! 🎉
               </p>
               <p className="text-sm text-slate-500">
                 Great job finishing all tasks
@@ -127,7 +127,7 @@ export function TaskPanel({
         onNext={handleNextTask}
         hasNext={hasNext}
         concepts={concepts}
-        transcript={transcript}
+        content={content}
       />
     </div>
   );
