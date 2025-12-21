@@ -11,6 +11,135 @@ const INITIAL_RETRY_DELAY = 1000; // 1 second
 // Helper function to sleep
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+type TranscriptErrorCode =
+  | "MISSING_CAPTIONS"
+  | "VIDEO_NOT_FOUND"
+  | "RATE_LIMITED"
+  | "BLOCKED"
+  | "BAD_REQUEST"
+  | "UPSTREAM_ERROR"
+  | "INTERNAL_ERROR";
+
+function extractUpstreamStatus(error: unknown): number | null {
+  const e = error as {
+    status?: unknown;
+    statusCode?: unknown;
+    code?: unknown;
+    response?: { status?: unknown };
+  };
+
+  if (typeof e?.status === "number") return e.status;
+  if (typeof e?.statusCode === "number") return e.statusCode;
+  if (typeof e?.code === "number") return e.code;
+  if (typeof e?.response?.status === "number") return e.response.status;
+
+  const msg = error instanceof Error ? error.message : String(error);
+  const match =
+    msg.match(/status code\s+(\d{3})/i) || msg.match(/status\s+(\d{3})/i);
+  if (match?.[1]) {
+    const parsed = Number.parseInt(match[1], 10);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  return null;
+}
+
+function classifyTranscriptError(error: unknown): {
+  status: number;
+  code: TranscriptErrorCode;
+  userMessage: string;
+  rawMessage: string;
+} {
+  const rawMessage = error instanceof Error ? error.message : String(error);
+  const status = extractUpstreamStatus(error);
+  const msg = rawMessage.toLowerCase();
+
+  const looksLikeMissingCaptions =
+    msg.includes("no transcript") ||
+    msg.includes("captions") ||
+    msg.includes("subtitles") ||
+    msg.includes("transcript is disabled") ||
+    (status === 400 && msg.includes("get_transcript"));
+
+  if (looksLikeMissingCaptions) {
+    return {
+      status: 404,
+      code: "MISSING_CAPTIONS",
+      userMessage: "No captions/transcript are available for this video.",
+      rawMessage,
+    };
+  }
+
+  const looksLikeVideoNotFound =
+    status === 404 ||
+    msg.includes("video unavailable") ||
+    msg.includes("not found") ||
+    msg.includes("private") ||
+    msg.includes("unavailable");
+
+  if (looksLikeVideoNotFound) {
+    return {
+      status: 404,
+      code: "VIDEO_NOT_FOUND",
+      userMessage:
+        "This video is unavailable (private, removed, or not found).",
+      rawMessage,
+    };
+  }
+
+  if (status === 429 || msg.includes(" 429") || msg.includes("429")) {
+    return {
+      status: 429,
+      code: "RATE_LIMITED",
+      userMessage:
+        "YouTube is rate limiting transcript requests. Please try again in a bit.",
+      rawMessage,
+    };
+  }
+
+  if (
+    status === 403 ||
+    msg.includes(" 403") ||
+    msg.includes("403") ||
+    msg.includes("blocked")
+  ) {
+    return {
+      status: 403,
+      code: "BLOCKED",
+      userMessage:
+        "YouTube blocked this transcript request. Try again later or configure a proxy (YOUTUBE_TRANSCRIPT_PROXY).",
+      rawMessage,
+    };
+  }
+
+  if (status === 400) {
+    return {
+      status: 400,
+      code: "BAD_REQUEST",
+      userMessage:
+        "Invalid request. Please double-check the YouTube video URL/ID and try again.",
+      rawMessage,
+    };
+  }
+
+  if (status && status >= 500) {
+    return {
+      status: 502,
+      code: "UPSTREAM_ERROR",
+      userMessage:
+        "YouTube returned an upstream error while fetching the transcript. Please try again later.",
+      rawMessage,
+    };
+  }
+
+  return {
+    status: 500,
+    code: "INTERNAL_ERROR",
+    userMessage: "Failed to fetch transcript.",
+    rawMessage,
+  };
+}
+
 // Helper function to fetch transcript with retries and exponential backoff
 async function fetchTranscriptWithRetry(
   videoId: string,
@@ -165,30 +294,27 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(result);
     }
   } catch (error) {
-    console.error("All transcript fetch methods failed:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
+    const classified = classifyTranscriptError(error);
 
-    // Provide helpful error messages
-    let userMessage = `Failed to fetch transcript: ${errorMessage}.`;
-
-    if (
-      errorMessage.includes("disabled") ||
-      errorMessage.includes("captions")
-    ) {
-      userMessage += " This video may not have captions available.";
-    } else if (
-      errorMessage.includes("blocked") ||
-      errorMessage.includes("403") ||
-      errorMessage.includes("429")
-    ) {
-      userMessage +=
-        " YouTube may be temporarily blocking requests. Consider configuring a proxy in your environment variables (YOUTUBE_TRANSCRIPT_PROXY).";
+    if (classified.status >= 500) {
+      console.error("All transcript fetch methods failed:", error);
     } else {
-      userMessage +=
-        " Please ensure the video exists and has captions enabled.";
+      console.warn("Transcript unavailable:", classified.rawMessage);
     }
 
-    return NextResponse.json({ error: userMessage }, { status: 500 });
+    const body: {
+      error: string;
+      code: TranscriptErrorCode;
+      details?: string;
+    } = {
+      error: classified.userMessage,
+      code: classified.code,
+    };
+
+    if (process.env.NODE_ENV !== "production") {
+      body.details = classified.rawMessage;
+    }
+
+    return NextResponse.json(body, { status: classified.status });
   }
 }
